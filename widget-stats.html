@@ -8,11 +8,21 @@
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    .kpi-delta { font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; display:inline-block; margin-top:0.25rem; }
+    .kpi-delta.up   { background:#d4edda; color:#155724; }
+    .kpi-delta.down { background:#f8d7da; color:#721c24; }
+    .kpi-delta.none { background:#e9ecef; color:#6c757d; }
+    .sort-th { cursor:pointer; user-select:none; white-space:nowrap; }
+    .sort-th:hover { color: var(--green); }
+    .sort-th.active { color: var(--green); }
+    .period-btn.active { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
+    .empty-state { background:#f8f9fa; border-radius:8px; padding:2rem; text-align:center; margin:1rem 0; }
+  </style>
 </head>
 <body>
 <div class="layout">
 
-  <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="sidebar-logo">&#9632; Product Widgets</div>
     <div class="sidebar-nav">
@@ -23,22 +33,19 @@
       <a href="#"><span class="icon">&#9881;</span> Nastavenía</a>
     </div>
     <div class="sidebar-footer">
-      <div style="font-weight:600; color:white; margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
+      <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
       <div>modabella.sk</div>
-      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a; font-weight:600;">Starter</span></div>
+      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a;font-weight:600;">Starter</span></div>
     </div>
   </nav>
 
-  <!-- MAIN -->
   <main class="main">
-
-    <!-- Widget header -->
     <div class="card">
       <div class="card-header" style="flex-wrap:wrap; gap:0.5rem;">
         <h1>🧱 Odporúčané produkty &mdash; HP
-          <span class="badge badge-secondary" style="font-size:0.7rem; vertical-align:middle;">Template 5</span>
+          <span class="badge badge-secondary" style="font-size:0.7rem;vertical-align:middle;">Template 5</span>
         </h1>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
           <a href="#" class="btn btn-success btn-sm">✏️ Upraviť</a>
           <a href="#" class="btn btn-success btn-sm">📋 Kopírovať</a>
           <a href="#" class="btn btn-success btn-sm">🪄 Vložiť</a>
@@ -48,129 +55,247 @@
 
       <div class="card-body">
 
-        <!-- Časový filter -->
-        <div class="time-filter">
-          <span style="font-weight:600; color:var(--dark); margin-right:0.25rem;">Obdobie:</span>
-          <a href="#">7 dní</a>
-          <a href="#" class="active">30 dní</a>
-          <a href="#">90 dní</a>
+        <!-- #10: CASOVY FILTER s 180 dnimi -->
+        <div class="time-filter" id="period-filter">
+          <span style="font-weight:600;color:var(--dark);margin-right:0.25rem;">Obdobie:</span>
+          <a href="#" class="period-btn" data-days="7">7 dní</a>
+          <a href="#" class="period-btn active" data-days="30">30 dní</a>
+          <a href="#" class="period-btn" data-days="90">90 dní</a>
+          <a href="#" class="period-btn" data-days="180">180 dní</a>
           <a href="#" class="ml-auto btn btn-outline btn-sm">📅 Export CSV</a>
         </div>
+        <p id="period-info" style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;">
+          Zobrazujú sa dáta za: <strong>posledných 30 dní</strong>
+          &nbsp;&middot;&nbsp;
+          <span style="color:var(--muted);">Porovnanie: 1.2.2025 &ndash; 2.3.2025</span>
+        </p>
 
-        <!-- KPI karty -->
-        <div class="metric-row">
+        <!-- #1: KPI KARTY s delta badges -->
+        <div class="metric-row" id="kpi-row">
+
           <div class="metric">
             <p class="metric-label">Zobrazenia</p>
-            <p class="metric-value">6 420</p>
-            <p class="metric-sub">za posledných 30 dní</p>
+            <p class="metric-value" id="val-renders">6 420</p>
+            <span class="kpi-delta up" id="delta-renders">&uarr; +18% vs. predch. 30 dní</span>
+            <p class="metric-sub" style="margin-top:0.35rem;">predch.: 5 440</p>
           </div>
+
           <div class="metric">
             <p class="metric-label">Kliky</p>
-            <p class="metric-value">389</p>
-            <p class="metric-sub">za posledných 30 dní</p>
+            <p class="metric-value" id="val-clicks">389</p>
+            <span class="kpi-delta down" id="delta-clicks">&darr; -3% vs. predch. 30 dní</span>
+            <p class="metric-sub" style="margin-top:0.35rem;">predch.: 401</p>
           </div>
+
           <div class="metric">
             <p class="metric-label">CTR</p>
-            <p class="metric-value" style="color:var(--success);">6.06%</p>
-            <p class="metric-sub">kliky / zobrazenia</p>
+            <p class="metric-value" id="val-ctr" style="color:var(--success);">6.06%</p>
+            <span class="kpi-delta up" id="delta-ctr">&uarr; +0.4% vs. predch. 30 dní</span>
+            <p class="metric-sub" style="margin-top:0.35rem;">predch.: 5.7%</p>
           </div>
+
         </div>
 
-        <!-- Graf -->
-        <div id="widget-chart" class="chart-container"></div>
+        <!-- GRAF -->
+        <div id="widget-chart" class="chart-container" style="margin:1rem 0;"></div>
 
-        <!-- Top URL tabuľka -->
-        <h2 class="section-title" style="margin-top:1.5rem;">Zobrazenia podľa stránky</h2>
-        <table>
+        <!-- #3: URL TABULKA so sortovanim a first_seen -->
+        <h2 class="section-title" id="url-stats" style="margin-top:1.5rem;">
+          Zobrazenia podľa stránky
+        </h2>
+        <table id="url-table">
           <thead>
             <tr>
               <th>URL</th>
-              <th class="text-right">Zobrazenia</th>
-              <th class="text-right">Kliky</th>
-              <th class="text-right">CTR</th>
+              <th class="text-right sort-th active desc" onclick="sortUrl('renders')" id="th-renders">
+                Zobrazenia <span class="arrow">&#9660;</span>
+              </th>
+              <th class="text-right sort-th" onclick="sortUrl('clicks')" id="th-clicks">
+                Kliky <span class="arrow"></span>
+              </th>
+              <th class="text-right sort-th" onclick="sortUrl('ctr')" id="th-ctr">
+                CTR <span class="arrow"></span>
+              </th>
+              <th class="text-right sort-th" onclick="sortUrl('first_seen')" id="th-first_seen"
+                  title="Dátum kedy sa widget prvykrát zobrazil na tejto stránke">
+                1. zobr. <span class="arrow"></span>
+              </th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td><a href="#" style="color:var(--green);">modabella.sk/</a></td>
-              <td class="text-right">2 840</td>
-              <td class="text-right">198</td>
-              <td class="text-right"><span class="text-success">6.97%</span></td>
-            </tr>
-            <tr>
-              <td><a href="#" style="color:var(--green);">modabella.sk/novinky</a></td>
-              <td class="text-right">1 920</td>
-              <td class="text-right">104</td>
-              <td class="text-right"><span class="text-success">5.42%</span></td>
-            </tr>
-            <tr>
-              <td><a href="#" style="color:var(--green);">modabella.sk/saty</a></td>
-              <td class="text-right">1 100</td>
-              <td class="text-right">61</td>
-              <td class="text-right">5.55%</td>
-            </tr>
-            <tr>
-              <td><a href="#" style="color:var(--green);">modabella.sk/vypredaj</a></td>
-              <td class="text-right">410</td>
-              <td class="text-right">18</td>
-              <td class="text-right text-muted">4.39%</td>
-            </tr>
-            <tr>
-              <td><a href="#" style="color:var(--green);">modabella.sk/kontakt</a></td>
-              <td class="text-right">150</td>
-              <td class="text-right">8</td>
-              <td class="text-right text-muted">5.33%</td>
-            </tr>
-          </tbody>
+          <tbody id="url-tbody"></tbody>
         </table>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;">
+          “1. zobr.” = dátum kedy sa widget prvykrát zobrazil na danej stránke.
+        </p>
 
       </div>
     </div>
 
-    <div style="text-align:center; margin-top:0.5rem;">
-      <a href="index.html" style="color:var(--muted); font-size:0.85rem;">&larr; Späť na prehľad</a>
+    <div style="text-align:center;margin-top:0.5rem;">
+      <a href="index.html" style="color:var(--muted);font-size:0.85rem;">&larr; Späť na prehľad</a>
     </div>
   </main>
 </div>
 
 <script>
-const days = [];
-const base = new Date('2025-03-11');
-for (let i = 0; i < 30; i++) {
-  const d = new Date(base);
-  d.setDate(base.getDate() + i);
-  days.push(d.toISOString().split('T')[0]);
-}
+// ---- Datové sady pre každé obdobie ----
+const PERIODS = {
+  7:   { renders: 1841, clicks: 112, ctr: 6.1,  prev_r: 1602, prev_c: 101, prev_ctr: 5.8 },
+  30:  { renders: 6420, clicks: 389, ctr: 6.06, prev_r: 5440, prev_c: 401, prev_ctr: 5.7 },
+  90:  { renders:17340, clicks: 987, ctr: 5.69, prev_r:13200, prev_c: 820, prev_ctr: 5.2 },
+  180: { renders:32100, clicks:1820, ctr: 5.67, prev_r:24800, prev_c:1340, prev_ctr: 5.4 }
+};
 
-const seed = (i) => Math.sin(i * 7.3 + 1.1);
-const renders = days.map((_, i) => Math.round(180 + 60 * seed(i) + i * 3.5));
-const clicks  = renders.map((r, i) => Math.round(r * (0.05 + 0.025 * seed(i + 5))));
-
-const vals = [
-  ...days.map((d, i) => ({ datum: d, hodnota: renders[i], typ: 'Zobrazenia' })),
-  ...days.map((d, i) => ({ datum: d, hodnota: clicks[i],  typ: 'Kliky' }))
+const URL_DATA = [
+  { url: 'modabella.sk/',          renders: 2840, clicks: 198, ctr: 6.97, first_seen: '2024-10-15' },
+  { url: 'modabella.sk/novinky',   renders: 1920, clicks: 104, ctr: 5.42, first_seen: '2024-11-02' },
+  { url: 'modabella.sk/saty',      renders: 1100, clicks:  61, ctr: 5.55, first_seen: '2024-12-10' },
+  { url: 'modabella.sk/vypredaj',  renders:  410, clicks:  18, ctr: 4.39, first_seen: '2025-01-08' },
+  { url: 'modabella.sk/kontakt',   renders:  150, clicks:   8, ctr: 5.33, first_seen: '2025-02-20' },
+  { url: 'modabella.sk/blog/jar',  renders:   92, clicks:   2, ctr: 2.17, first_seen: '2025-03-28' },
+  { url: 'modabella.sk/o-nas',     renders:   61, clicks:   1, ctr: 1.64, first_seen: '2025-04-01' },
 ];
 
-vegaEmbed('#widget-chart', {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  width: "container", height: 200,
-  data: { values: vals },
-  mark: { type: "line", interpolate: "monotone", strokeWidth: 2, point: { filled: true, size: 45 } },
-  encoding: {
-    x: { field: "datum", type: "temporal", title: null, axis: { labelAngle: -30, labelFontSize: 11, tickCount: 8 } },
-    y: { field: "hodnota", type: "quantitative", title: null },
-    color: {
-      field: "typ", type: "nominal",
-      scale: { domain: ["Zobrazenia", "Kliky"], range: ["#00a28a", "#4a90d9"] },
-      legend: { orient: "top-left", labelFontSize: 12 }
-    },
-    tooltip: [
-      { field: "datum", type: "temporal", title: "Dátum" },
-      { field: "typ", title: "Typ" },
-      { field: "hodnota", title: "Počet", format: "," }
-    ]
+let currentPeriod = 30;
+let urlSortKey = 'renders';
+let urlSortDir = 'desc';
+
+function fmt(n) { return Number(n).toLocaleString('sk-SK'); }
+function delta(curr, prev) {
+  if (!prev || prev === 0) return null;
+  return Math.round((curr - prev) / prev * 1000) / 10;
+}
+function deltaHtml(d, label) {
+  if (d === null) return `<span class="kpi-delta none">nedostatok dát</span>`;
+  const cls = d >= 0 ? 'up' : 'down';
+  const arrow = d >= 0 ? '&uarr;' : '&darr;';
+  return `<span class="kpi-delta ${cls}">${arrow} ${Math.abs(d)}% vs. predch. ${label}</span>`;
+}
+function ctrColor(v) {
+  if (v >= 5) return 'color:var(--success);font-weight:600;';
+  if (v > 0)  return '';
+  return 'color:var(--muted);';
+}
+
+function updateKPI(days) {
+  const p = PERIODS[days];
+  const labels = { 7:'7 dní', 30:'30 dní', 90:'90 dní', 180:'180 dní' };
+  const lbl = labels[days];
+
+  document.getElementById('val-renders').textContent = fmt(p.renders);
+  document.getElementById('val-clicks').textContent  = fmt(p.clicks);
+  document.getElementById('val-ctr').textContent     = p.ctr + '%';
+
+  document.getElementById('delta-renders').outerHTML =
+    '<span class="kpi-delta ' + (delta(p.renders,p.prev_r)>=0?'up':'down') + '" id="delta-renders">' +
+    deltaHtml(delta(p.renders,p.prev_r), lbl).replace(/<span[^>]*>|<\/span>/g,'') + '</span>';
+  document.getElementById('delta-clicks').outerHTML =
+    '<span class="kpi-delta ' + (delta(p.clicks,p.prev_c)>=0?'up':'down') + '" id="delta-clicks">' +
+    deltaHtml(delta(p.clicks,p.prev_c), lbl).replace(/<span[^>]*>|<\/span>/g,'') + '</span>';
+  document.getElementById('delta-ctr').outerHTML =
+    '<span class="kpi-delta ' + (delta(p.ctr,p.prev_ctr)>=0?'up':'down') + '" id="delta-ctr">' +
+    deltaHtml(delta(p.ctr,p.prev_ctr), lbl).replace(/<span[^>]*>|<\/span>/g,'') + '</span>';
+
+  document.getElementById('period-info').innerHTML =
+    `Zobrazujú sa dáta za: <strong>posledných ${days} dní</strong>`;
+}
+
+// Period filter
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentPeriod = parseInt(this.dataset.days);
+    updateKPI(currentPeriod);
+    renderChart(currentPeriod);
+  });
+});
+
+// URL sort
+function sortUrl(key) {
+  if (urlSortKey === key) {
+    urlSortDir = urlSortDir === 'desc' ? 'asc' : 'desc';
+  } else {
+    urlSortKey = key;
+    urlSortDir = key === 'first_seen' ? 'asc' : 'desc';
   }
-}, { actions: false, mode: "vega-lite" });
+
+  ['renders','clicks','ctr','first_seen'].forEach(k => {
+    const th = document.getElementById('th-' + k);
+    th.classList.remove('active','asc','desc');
+    th.querySelector('.arrow').innerHTML = '';
+  });
+  const activeTh = document.getElementById('th-' + key);
+  activeTh.classList.add('active', urlSortDir);
+  activeTh.querySelector('.arrow').innerHTML = urlSortDir === 'desc' ? '&#9660;' : '&#9650;';
+
+  renderUrlTable();
+}
+
+function renderUrlTable() {
+  const sorted = [...URL_DATA].sort((a, b) => {
+    let av = a[urlSortKey], bv = b[urlSortKey];
+    if (typeof av === 'string') return urlSortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    return urlSortDir === 'asc' ? av - bv : bv - av;
+  });
+
+  document.getElementById('url-tbody').innerHTML = sorted.map(row => `
+    <tr>
+      <td style="max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+        <a href="https://${row.url}" target="_blank" rel="noopener" style="color:var(--green);">${row.url}</a>
+      </td>
+      <td class="text-right">${fmt(row.renders)}</td>
+      <td class="text-right">${fmt(row.clicks)}</td>
+      <td class="text-right"><span style="${ctrColor(row.ctr)}">${row.ctr}%</span></td>
+      <td class="text-right" style="font-size:0.82rem;color:var(--muted);">${row.first_seen}</td>
+    </tr>
+  `).join('');
+}
+
+// Vega-Lite graf
+function renderChart(days) {
+  const base = new Date('2025-03-11');
+  const pts  = days <= 30 ? days : Math.min(days, 60);
+  const d = [], r = [], c = [];
+  for (let i = 0; i < pts; i++) {
+    const dt = new Date(base); dt.setDate(base.getDate() + i);
+    d.push(dt.toISOString().split('T')[0]);
+    const s = Math.sin(i * 7.3 + 1.1);
+    const rend = Math.round(180 + 60 * s + i * (days <= 30 ? 3.5 : 1.2));
+    r.push(rend);
+    c.push(Math.round(rend * (0.05 + 0.025 * Math.sin(i * 4.1))));
+  }
+  const vals = [
+    ...d.map((dt,i) => ({ datum: dt, hodnota: r[i], typ: 'Zobrazenia' })),
+    ...d.map((dt,i) => ({ datum: dt, hodnota: c[i], typ: 'Kliky'      }))
+  ];
+  vegaEmbed('#widget-chart', {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    width: "container", height: 200,
+    data: { values: vals },
+    mark: { type: "line", interpolate: "monotone", strokeWidth: 2, point: { filled:true, size:40 } },
+    encoding: {
+      x: { field: "datum", type: "temporal", title: null,
+           axis: { labelAngle: -30, labelFontSize: 11, tickCount: Math.min(pts, 10) } },
+      y: { field: "hodnota", type: "quantitative", title: null },
+      color: {
+        field: "typ", type: "nominal",
+        scale: { domain: ["Zobrazenia","Kliky"], range: ["#00a28a","#4a90d9"] },
+        legend: { orient: "top-left", labelFontSize: 12 }
+      },
+      tooltip: [
+        { field: "datum",   type: "temporal",     title: "Dátum" },
+        { field: "typ",     type: "nominal",      title: "Typ"   },
+        { field: "hodnota", type: "quantitative", title: "Počet" }
+      ]
+    }
+  }, { actions: false, mode: "vega-lite" });
+}
+
+// Init
+renderUrlTable();
+renderChart(30);
 </script>
 </body>
 </html>
