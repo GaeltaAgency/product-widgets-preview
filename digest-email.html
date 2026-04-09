@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Týždný digest — Product Widgets preview</title>
+  <style>
+    body{background:#f4f6f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+         font-size:15px;color:#1a1a2e;padding:24px 12px;}
+    /* meta bar */
+    .meta{max-width:580px;margin:0 auto 12px;font-size:.8rem;color:#6c757d;
+          display:flex;align-items:center;justify-content:space-between;}
+    .meta a{color:#00a28a;text-decoration:none;font-weight:600;}
+    /* email card */
+    .wrap{max-width:580px;margin:0 auto;background:white;border-radius:10px;
+          overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+    .header{background:#00a28a;padding:28px 32px;}
+    .header h1{color:white;font-size:1.35rem;font-weight:700;margin-bottom:4px;}
+    .header p{color:rgba(255,255,255,.82);font-size:.88rem;}
+    .body{padding:28px 32px;}
+    .totals{display:flex;gap:12px;margin-bottom:24px;}
+    .kpi{flex:1;background:#f8fffe;border:1px solid #c8ede5;border-radius:8px;
+         padding:14px 12px;text-align:center;}
+    .kpi-label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+               letter-spacing:.05em;color:#6c757d;margin-bottom:4px;}
+    .kpi-val{font-size:1.6rem;font-weight:800;color:#00a28a;line-height:1.1;}
+    .kpi-sub{font-size:.72rem;color:#6c757d;margin-top:3px;}
+    h2{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;font-size:.85rem;}
+    th{text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;
+       letter-spacing:.04em;color:#6c757d;padding:6px 8px;
+       border-bottom:2px solid #e9ecef;}
+    th.r,td.r{text-align:right;}
+    td{padding:10px 8px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    .w-name{font-weight:600;color:#1a1a2e;}
+    .badge{display:inline-block;padding:2px 6px;border-radius:4px;
+           font-size:.72rem;font-weight:700;white-space:nowrap;}
+    .up{background:#d4edda;color:#155724;}
+    .down{background:#f8d7da;color:#721c24;}
+    .flat{background:#e9ecef;color:#6c757d;}
+    .top-highlight{background:#f0faf7;border:1px solid #c8ede5;border-radius:8px;
+                   padding:14px 16px;margin-bottom:20px;}
+    .top-highlight .label{font-size:.75rem;font-weight:700;text-transform:uppercase;
+                           color:#00a28a;margin-bottom:4px;}
+    .top-highlight .name{font-size:1rem;font-weight:700;}
+    .top-highlight .nums{font-size:.85rem;color:#6c757d;margin-top:4px;}
+    .cta{text-align:center;margin:24px 0 4px;}
+    .cta a{background:#00a28a;color:white;text-decoration:none;
+           padding:11px 28px;border-radius:6px;font-weight:700;
+           font-size:.9rem;display:inline-block;}
+    .footer{background:#f4f6f8;padding:18px 32px;font-size:.78rem;
+            color:#6c757d;text-align:center;border-top:1px solid #e9ecef;}
+    .footer a{color:#00a28a;text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<div class="meta">
+  <span>📧 Preview: Týždný email digest &mdash; Product Widgets</span>
+  <a href="widget-stats.html">← Späť na štatistiky</a>
+</div>
+
+<div class="wrap">
+
+  <div class="header">
+    <h1>📊 Týždný prehľad widgetov</h1>
+    <p>Moda Bella s.r.o. &nbsp;&middot;&nbsp; 31.03.2025 &ndash; 06.04.2025</p>
+  </div>
+
+  <div class="body">
+
+    <div class="totals">
+      <div class="kpi">
+        <div class="kpi-label">Zobrazenia</div>
+        <div class="kpi-val">1 841</div>
+        <div class="kpi-sub">tento týždeň</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Kliky</div>
+        <div class="kpi-val">112</div>
+        <div class="kpi-sub">tento týždeň</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-val" style="color:#00a28a">6.1%</div>
+        <div class="kpi-sub">kliky / zobrazenia</div>
+      </div>
+    </div>
+
+    <div class="top-highlight">
+      <div class="label">🏆 Najlepší widget týždna</div>
+      <div class="name">Odporúčané produkty &mdash; HP</div>
+      <div class="nums">
+        1 204 zobr. &nbsp;&middot;&nbsp; 74 klikov &nbsp;&middot;&nbsp; CTR 6.1%
+        &nbsp;&middot;&nbsp;
+        <span style="color:#155724">&uarr; +15% vs. min. týždeň</span>
+      </div>
+    </div>
+
+    <h2>Všetky widgety</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Widget</th>
+          <th class="r">Zobr.</th>
+          <th class="r">Kliky</th>
+          <th class="r">CTR</th>
+          <th class="r">vs. min. týž.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="w-name">Odporúčané produkty &mdash; HP</td>
+          <td class="r">1 204</td><td class="r">74</td>
+          <td class="r" style="color:#00a28a">6.1%</td>
+          <td class="r"><span class="badge up">&uarr; +15%</span></td>
+        </tr>
+        <tr>
+          <td class="w-name">Podobné produkty &mdash; Detail</td>
+          <td class="r">431</td><td class="r">28</td>
+          <td class="r" style="color:#00a28a">6.5%</td>
+          <td class="r"><span class="badge up">&uarr; +8%</span></td>
+        </tr>
+        <tr>
+          <td class="w-name">Flashsale banner &mdash; Saty</td>
+          <td class="r">206</td><td class="r">10</td>
+          <td class="r">4.9%</td>
+          <td class="r"><span class="badge down">&darr; -12%</span></td>
+        </tr>
+        <tr>
+          <td class="w-name">Nové produkty &mdash; Blog</td>
+          <td class="r">92</td><td class="r">3</td>
+          <td class="r">3.3%</td>
+          <td class="r"><span class="badge flat">n/a</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cta">
+      <a href="dashboard.html">Zobraziť detail štatistík</a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Dostávate tento email pretože ste zákazníkom doplnku <strong>Product Widgets</strong> pre Shoptet.<br>
+    <a href="#">Odhlásiť sa z týždenného digestu</a>
+  </div>
+
+</div>
+
+</body>
+</html>
