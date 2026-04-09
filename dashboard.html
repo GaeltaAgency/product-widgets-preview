@@ -8,11 +8,36 @@
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    .sort-btn { cursor:pointer; user-select:none; white-space:nowrap; }
+    .sort-btn:hover { color: var(--green); }
+    .sort-btn .arrow { font-size:0.7rem; margin-left:2px; opacity:0.4; }
+    .sort-btn.asc .arrow::after { content: ' ▲'; opacity:1; }
+    .sort-btn.desc .arrow::after { content: ' ▼'; opacity:1; }
+    .sort-btn.asc, .sort-btn.desc { color: var(--green); }
+    .date-range-group { display:flex; gap:0.5rem; align-items:center; }
+    .date-range-group input[type=date] {
+      border:1px solid var(--border); border-radius:5px;
+      padding:0.3rem 0.6rem; font-size:0.85rem; color:var(--dark);
+      background:white;
+    }
+    .filter-bar {
+      display:flex; gap:0.75rem; align-items:center;
+      flex-wrap:wrap; margin-bottom:1rem;
+    }
+    .filter-bar .label { font-weight:600; font-size:0.85rem; color:var(--dark); }
+    .vs-badge {
+      display:inline-block; padding:0.15rem 0.5rem;
+      border-radius:4px; font-size:0.75rem; font-weight:600;
+    }
+    .vs-up { background:#d4edda; color:#155724; }
+    .vs-down { background:#f8d7da; color:#721c24; }
+    .vs-neutral { background:#e9ecef; color:#495057; }
+  </style>
 </head>
 <body>
 <div class="layout">
 
-  <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="sidebar-logo">&#9632; Product Widgets</div>
     <div class="sidebar-nav">
@@ -23,23 +48,24 @@
       <a href="#"><span class="icon">&#9881;</span> Nastavenía</a>
     </div>
     <div class="sidebar-footer">
-      <div style="font-weight:600; color:white; margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
+      <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
       <div>modabella.sk</div>
-      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a; font-weight:600;">Starter</span></div>
+      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a;font-weight:600;">Starter</span></div>
     </div>
   </nav>
 
-  <!-- MAIN -->
   <main class="main">
     <div class="page-title">📊 Štatistiky</div>
 
     <!-- SOFT LIMIT BANNER -->
     <div class="alert alert-warning">
-      <div>
-        <strong>Blížite sa k limitu zobrazení.</strong>
+      <div>⚠️ <strong>Blížite sa k limitu zobrazení.</strong>
         Tento mesiac: <strong>17 340</strong> z <strong>20 000</strong> (87%)
+        <div style="background:#ffe082;border-radius:4px;height:6px;width:200px;margin-top:6px;display:inline-block;vertical-align:middle;">
+          <div style="background:#f59e0b;border-radius:4px;height:6px;width:174px;"></div>
+        </div>
       </div>
-      <a href="#" class="btn btn-warning btn-sm">Prejsť na Pro</a>
+      <a href="#" class="btn btn-warning btn-sm">Prejsť na Pro &rarr;</a>
     </div>
 
     <!-- KPI KARTY -->
@@ -47,130 +73,264 @@
       <div class="metric">
         <p class="metric-label">Zobrazenia (30 dní)</p>
         <p class="metric-value">17 340</p>
-        <p class="metric-sub">&uarr; +12% vs min. mesiac</p>
+        <p class="metric-sub"><span class="vs-badge vs-up">&uarr; +12%</span> vs pred. mesiac</p>
       </div>
       <div class="metric">
         <p class="metric-label">Kliky (30 dní)</p>
         <p class="metric-value">841</p>
-        <p class="metric-sub">&uarr; +8% vs min. mesiac</p>
+        <p class="metric-sub"><span class="vs-badge vs-up">&uarr; +8%</span> vs pred. mesiac</p>
       </div>
       <div class="metric">
         <p class="metric-label">Priemerné CTR</p>
         <p class="metric-value">4.85%</p>
-        <p class="metric-sub">kliky / zobrazenia</p>
+        <p class="metric-sub"><span class="vs-badge vs-down">&darr; -0.3%</span> vs pred. mesiac</p>
       </div>
       <div class="metric">
         <p class="metric-label">Aktívne widgety</p>
-        <p class="metric-value">8 <span style="font-size:1rem; font-weight:400; color:#6c757d;">/ 10</span></p>
+        <p class="metric-value">8 <span style="font-size:1rem;font-weight:400;color:#6c757d;">/ 10</span></p>
         <p class="metric-sub">2 volné sloty</p>
       </div>
     </div>
 
-    <!-- GRAF -->
+    <!-- MESACNY GRAF -->
     <div class="card">
       <div class="card-header">
-        <h2>Štatistiky po mesiacoch</h2>
+        <h2>📅 Vyvoj po mesiacoch</h2>
       </div>
       <div class="card-body">
         <div id="dashboard-chart" class="chart-container"></div>
       </div>
     </div>
 
-    <!-- TOP WIDGETY -->
+    <!-- TABULKA WIDGETOV s filtrom + sortovanim -->
     <div class="card">
-      <div class="card-header">
-        <h2>Top widgety podľa CTR</h2>
+      <div class="card-header" style="flex-wrap:wrap; gap:0.75rem;">
+        <h2>📌 Widgety v časovom okne</h2>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Názov</th>
-            <th class="text-right">Zobrazenia</th>
-            <th class="text-right">Kliky</th>
-            <th class="text-right">CTR</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Odporúčané produkty &mdash; HP</a>
-              <div style="font-size:0.78rem; color:var(--muted);">Template 5</div>
-            </td>
-            <td class="text-right">6 420</td>
-            <td class="text-right">389</td>
-            <td class="text-right"><span class="text-success">6.06%</span></td>
-          </tr>
-          <tr>
-            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Podobné produkty</a>
-              <div style="font-size:0.78rem; color:var(--muted);">Template 8</div>
-            </td>
-            <td class="text-right">5 210</td>
-            <td class="text-right">241</td>
-            <td class="text-right"><span class="text-success">4.63%</span></td>
-          </tr>
-          <tr>
-            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Top predaje &mdash; sidebar</a>
-              <div style="font-size:0.78rem; color:var(--muted);">Template 3</div>
-            </td>
-            <td class="text-right">3 810</td>
-            <td class="text-right">142</td>
-            <td class="text-right">3.73%</td>
-          </tr>
-          <tr>
-            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Nové produkty</a>
-              <div style="font-size:0.78rem; color:var(--muted);">Template 1</div>
-            </td>
-            <td class="text-right">1 900</td>
-            <td class="text-right">69</td>
-            <td class="text-right">3.63%</td>
-          </tr>
-          <tr>
-            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Akciové produkty</a>
-              <div style="font-size:0.78rem; color:var(--muted);">Template 2</div>
-            </td>
-            <td class="text-right">1 340</td>
-            <td class="text-right">34</td>
-            <td class="text-right text-muted">2.54%</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td><strong>Celkom</strong></td>
-            <td class="text-right">17 340</td>
-            <td class="text-right">841</td>
-            <td class="text-right">4.85%</td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="card-body" style="padding-bottom:0;">
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <span class="label">Obdobie:</span>
+
+          <!-- Preddefinované okná -->
+          <div style="display:flex; gap:0.4rem;">
+            <button class="btn btn-sm btn-outline period-btn" data-days="7">7 dní</button>
+            <button class="btn btn-sm btn-success period-btn active" data-days="30">30 dní</button>
+            <button class="btn btn-sm btn-outline period-btn" data-days="90">90 dní</button>
+            <button class="btn btn-sm btn-outline period-btn" data-days="180">180 dní</button>
+          </div>
+
+          <!-- Custom rozsah -->
+          <div class="date-range-group">
+            <span style="color:var(--muted); font-size:0.82rem;">alebo vlastné:</span>
+            <input type="date" id="date-from" value="2025-03-10">
+            <span style="color:var(--muted);">&#8212;</span>
+            <input type="date" id="date-to" value="2025-04-09">
+            <button class="btn btn-sm btn-outline" onclick="applyCustomRange()">Použiť</button>
+          </div>
+
+          <!-- Export -->
+          <a href="#" class="btn btn-sm btn-outline" style="margin-left:auto;">📅 Export CSV</a>
+        </div>
+
+        <!-- Aktualny filter info -->
+        <div id="filter-info" style="font-size:0.82rem; color:var(--muted); margin-bottom:0.75rem;">
+          Zobrazujú sa dáta za: <strong id="filter-label">posledných 30 dní</strong>
+        </div>
+
+      </div>
+
+      <!-- Sortovateľná tabuľka -->
+      <div style="overflow-x:auto;">
+        <table id="widgets-table">
+          <thead>
+            <tr>
+              <th style="min-width:200px;">Názov widgetu</th>
+              <th class="text-right" style="min-width:80px;">
+                <span class="sort-btn" onclick="sortTable('deployed')">
+                  Nasadený<span class="arrow"></span>
+                </span>
+              </th>
+              <th class="text-right" style="min-width:100px;">
+                <span class="sort-btn desc" onclick="sortTable('renders')" id="sort-renders">
+                  Zobrazenia<span class="arrow"></span>
+                </span>
+              </th>
+              <th class="text-right" style="min-width:80px;">
+                <span class="sort-btn" onclick="sortTable('clicks')" id="sort-clicks">
+                  Kliky<span class="arrow"></span>
+                </span>
+              </th>
+              <th class="text-right" style="min-width:70px;">
+                <span class="sort-btn" onclick="sortTable('ctr')" id="sort-ctr">
+                  CTR<span class="arrow"></span>
+                </span>
+              </th>
+              <th class="text-right" style="min-width:80px;">
+                <span class="sort-btn" onclick="sortTable('deployed_days')" id="sort-deployed_days">
+                  Dní online<span class="arrow"></span>
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="widgets-tbody">
+          </tbody>
+          <tfoot id="widgets-tfoot">
+          </tfoot>
+        </table>
+      </div>
     </div>
 
-    <div style="text-align:center; margin-top:1rem;">
-      <a href="index.html" style="color:var(--muted); font-size:0.85rem;">&larr; Späť na prehľad</a>
+    <div style="text-align:center;margin-top:1rem;">
+      <a href="index.html" style="color:var(--muted);font-size:0.85rem;">&larr; Späť na prehľad</a>
     </div>
   </main>
 </div>
 
 <script>
-const data = [
-  {m:'11/2024', z:3100, k:134}, {m:'12/2024', z:5200, k:221},
-  {m:'01/2025', z:6800, k:290}, {m:'02/2025', z:7100, k:318},
-  {m:'03/2025', z:9400, k:401}, {m:'04/2025', z:11200, k:498},
-  {m:'05/2025', z:10800, k:477}, {m:'06/2025', z:12400, k:531},
-  {m:'07/2025', z:13100, k:562}, {m:'08/2025', z:14200, k:603},
-  {m:'09/2025', z:15800, k:671}, {m:'10/2025', z:17340, k:841}
+// --- Data ---
+const allWidgets = [
+  { name: 'Odporúčané produkty — HP',  template: 'Template 5', deployed: '2024-10-15', renders: 6420, clicks: 389, days: 177 },
+  { name: 'Podobné produkty',            template: 'Template 8', deployed: '2024-12-01', renders: 5210, clicks: 241, days: 130 },
+  { name: 'Top predaje — sidebar',      template: 'Template 3', deployed: '2025-01-18', renders: 3810, clicks: 142, days: 81  },
+  { name: 'Nové produkty',              template: 'Template 1', deployed: '2024-12-03', renders: 1900, clicks:  69, days: 128 },
+  { name: 'Akciové produkty',           template: 'Template 2', deployed: '2025-02-20', renders: 1340, clicks:  34, days: 48  },
+  { name: 'Súvisiací obsah — blog',    template: 'Template 6', deployed: '2025-03-05', renders:  820, clicks:  28, days: 35  },
+  { name: 'Flash sale banner',          template: 'Template 4', deployed: '2025-03-28', renders:  410, clicks:  12, days: 12  },
+  { name: 'Nový — testovací',         template: 'Template 9', deployed: '2025-04-03', renders:   89, clicks:   2, days:  6  },
 ];
 
-const vals = [
-  ...data.map(d => ({ mesiac: d.m, hodnota: d.z, typ: 'Zobrazenia' })),
-  ...data.map(d => ({ mesiac: d.m, hodnota: d.k, typ: 'Kliky' }))
-];
+let currentSort = { key: 'renders', dir: 'desc' };
 
+function ctr(r, c) { return r > 0 ? Math.round(c / r * 1000) / 10 : 0; }
+function fmt(n) { return n.toLocaleString('sk-SK'); }
+function ctrColor(v) {
+  if (v >= 5) return 'color:var(--success); font-weight:600;';
+  if (v >= 2) return '';
+  return 'color:var(--muted);';
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('widgets-tbody');
+  const tfoot = document.getElementById('widgets-tfoot');
+
+  const totalR = data.reduce((s, w) => s + w.renders, 0);
+  const totalC = data.reduce((s, w) => s + w.clicks, 0);
+  const totalCtr = ctr(totalR, totalC);
+
+  tbody.innerHTML = data.map(w => {
+    const c = ctr(w.renders, w.clicks);
+    const dLabel = w.days >= 180 ? '6+ mes.' :
+                   w.days >= 90  ? '3+ mes.' :
+                   w.days >= 30  ? w.days + ' dní' :
+                   '<span style="color:var(--warning);font-weight:600;">' + w.days + ' dní 🆕</span>';
+    return `
+      <tr>
+        <td>
+          <a href="widget-stats.html" style="color:var(--dark);text-decoration:none;">
+            <div style="font-weight:600;">${w.name}</div>
+            <div style="font-size:0.78rem;color:var(--muted);">${w.template}</div>
+          </a>
+        </td>
+        <td class="text-right" style="font-size:0.82rem;color:var(--muted);">${w.deployed}</td>
+        <td class="text-right">${fmt(w.renders)}</td>
+        <td class="text-right">${fmt(w.clicks)}</td>
+        <td class="text-right"><span style="${ctrColor(c)}">${c}%</span></td>
+        <td class="text-right">${dLabel}</td>
+      </tr>`;
+  }).join('');
+
+  tfoot.innerHTML = `
+    <tr>
+      <td colspan="2"><strong>Celkom</strong> <span style="font-size:0.78rem;color:var(--muted);">(za zvolené obdobie)</span></td>
+      <td class="text-right">${fmt(totalR)}</td>
+      <td class="text-right">${fmt(totalC)}</td>
+      <td class="text-right">${totalCtr}%</td>
+      <td></td>
+    </tr>`;
+}
+
+function sortTable(key) {
+  if (currentSort.key === key) {
+    currentSort.dir = currentSort.dir === 'desc' ? 'asc' : 'desc';
+  } else {
+    currentSort = { key, dir: 'desc' };
+  }
+
+  // Update header arrows
+  document.querySelectorAll('.sort-btn').forEach(el => {
+    el.classList.remove('asc', 'desc');
+  });
+  const activeBtn = document.getElementById('sort-' + key);
+  if (activeBtn) activeBtn.classList.add(currentSort.dir);
+
+  const sorted = [...allWidgets].sort((a, b) => {
+    let av = key === 'ctr' ? ctr(a.renders, a.clicks) :
+             key === 'deployed' ? a.deployed :
+             key === 'deployed_days' ? a.days : a[key];
+    let bv = key === 'ctr' ? ctr(b.renders, b.clicks) :
+             key === 'deployed' ? b.deployed :
+             key === 'deployed_days' ? b.days : b[key];
+    if (av < bv) return currentSort.dir === 'asc' ? -1 : 1;
+    if (av > bv) return currentSort.dir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  renderTable(sorted);
+}
+
+// Period filter buttons
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.period-btn').forEach(b => {
+      b.classList.remove('btn-success', 'active');
+      b.classList.add('btn-outline');
+    });
+    this.classList.remove('btn-outline');
+    this.classList.add('btn-success', 'active');
+    const days = this.dataset.days;
+    document.getElementById('filter-label').textContent = 'posledných ' + days + ' dní';
+    // V produkcii tu pride AJAX reload dat; v preview len vizualna zmena
+  });
+});
+
+function applyCustomRange() {
+  const from = document.getElementById('date-from').value;
+  const to   = document.getElementById('date-to').value;
+  if (from && to) {
+    document.getElementById('filter-label').textContent = from + ' – ' + to;
+    document.querySelectorAll('.period-btn').forEach(b => {
+      b.classList.remove('btn-success', 'active');
+      b.classList.add('btn-outline');
+    });
+  }
+}
+
+// Inicializacia
+renderTable([...allWidgets].sort((a, b) => b.renders - a.renders));
+document.getElementById('sort-renders').classList.add('desc');
+
+// --- MESACNY GRAF ---
+const mData = [
+  {m:'11/2024',z:3100,k:134},{m:'12/2024',z:5200,k:221},
+  {m:'01/2025',z:6800,k:290},{m:'02/2025',z:7100,k:318},
+  {m:'03/2025',z:9400,k:401},{m:'04/2025',z:11200,k:498},
+  {m:'05/2025',z:10800,k:477},{m:'06/2025',z:12400,k:531},
+  {m:'07/2025',z:13100,k:562},{m:'08/2025',z:14200,k:603},
+  {m:'09/2025',z:15800,k:671},{m:'10/2025',z:17340,k:841}
+];
+const chartVals = [
+  ...mData.map(d => ({ mesiac: d.m, hodnota: d.z, typ: 'Zobrazenia' })),
+  ...mData.map(d => ({ mesiac: d.m, hodnota: d.k, typ: 'Kliky' }))
+];
 vegaEmbed('#dashboard-chart', {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  width: "container", height: 220,
-  data: { values: vals },
+  width: "container", height: 200,
+  data: { values: chartVals },
   mark: { type: "line", interpolate: "monotone", strokeWidth: 2.5, point: { filled: true, size: 50 } },
   encoding: {
-    x: { field: "mesiac", type: "nominal", sort: null, title: null, axis: { labelAngle: -30, labelFontSize: 12 } },
+    x: { field: "mesiac", type: "nominal", sort: null, title: null,
+         axis: { labelAngle: -30, labelFontSize: 12 } },
     y: { field: "hodnota", type: "quantitative", title: null },
     color: {
       field: "typ", type: "nominal",
