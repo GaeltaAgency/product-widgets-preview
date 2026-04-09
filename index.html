@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Widgets v2 — Preview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background:#f4f6f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin:0; padding: 3rem 1rem;">
+  <div style="max-width: 760px; margin: 0 auto;">
+    <div style="text-align:center; margin-bottom: 3rem;">
+      <h1 style="font-size:2rem; color:#14141f; margin-bottom:0.5rem;">Product Widgets v2</h1>
+      <p style="color:#6c757d; font-size:1.1rem;">UI Preview &mdash; nový backend admin</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+
+      <a href="dashboard.html" style="text-decoration:none;">
+        <div class="preview-card">
+          <div class="preview-icon">📊</div>
+          <h2>Dashboard</h2>
+          <p>KPI karty, mesačný graf, soft-limit banner, top widgety</p>
+          <span class="preview-badge">Pozrieť</span>
+        </div>
+      </a>
+
+      <a href="widgets.html" style="text-decoration:none;">
+        <div class="preview-card">
+          <div class="preview-icon">🧱</div>
+          <h2>Widgety</h2>
+          <p>Zoznam so 7d mini-stats stĺpcami, filter, akcie</p>
+          <span class="preview-badge">Pozrieť</span>
+        </div>
+      </a>
+
+      <a href="widget-stats.html" style="text-decoration:none;">
+        <div class="preview-card">
+          <div class="preview-icon">📈</div>
+          <h2>Widget &mdash; Stats</h2>
+          <p>Detailné štatistiky: filter, graf, top URL, CSV export</p>
+          <span class="preview-badge">Pozrieť</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div style="margin-top: 3rem; padding: 1.5rem; background:white; border-radius:8px; border-left: 4px solid #00a28a;">
+      <p style="margin:0; color:#6c757d; font-size:0.9rem;">
+        <strong style="color:#14141f;">Poznámka:</strong> Toto je statický HTML preview. Dáta sú ukážkové.
+        Skutočné nasadenie prebieha v
+        <a href="https://github.com/GaeltaAgency/product-widgets-upgrade" style="color:#00a28a;">product-widgets-upgrade</a> repe.
+      </p>
+    </div>
+  </div>
+
+  <style>
+    .preview-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      border: 1px solid #e9ecef;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      color: #14141f;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .preview-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .preview-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .preview-card h2 { font-size: 1.1rem; margin: 0 0 0.5rem; }
+    .preview-card p { color: #6c757d; font-size: 0.875rem; margin: 0 0 1rem; }
+    .preview-badge {
+      display: inline-block;
+      background: #00a28a;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  </style>
+</body>
+</html>

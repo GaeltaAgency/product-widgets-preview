@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widgety — Product Widgets v2</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">&#9632; Product Widgets</div>
+    <div class="sidebar-nav">
+      <a href="dashboard.html"><span class="icon">📊</span> Štatistiky</a>
+      <a href="widgets.html" class="active"><span class="icon">🧱</span> Widgety</a>
+      <a href="#"><span class="icon">🗄</span> Dáta</a>
+      <a href="#"><span class="icon">💳</span> Predplatné</a>
+      <a href="#"><span class="icon">&#9881;</span> Nastavenía</a>
+    </div>
+    <div class="sidebar-footer">
+      <div style="font-weight:600; color:white; margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
+      <div>modabella.sk</div>
+      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a; font-weight:600;">Starter</span></div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="card">
+      <div class="card-header">
+        <h1>🧱 Widgety</h1>
+        <a href="#" class="btn btn-success btn-lg">+ Nový widget</a>
+      </div>
+
+      <div class="card-body" style="padding-bottom:0;">
+        <div style="display:flex; gap:0.75rem;">
+          <div style="flex:1; display:flex; align-items:center; border:1px solid var(--border); border-radius:5px; padding: 0.375rem 0.75rem; background:white;">
+            <span style="margin-right:0.5rem; color:var(--muted);">&#128269;</span>
+            <input type="text" placeholder="Hľadať widget..." style="border:none; outline:none; flex:1; font-size:0.9rem;">
+          </div>
+          <select style="border:1px solid var(--border); border-radius:5px; padding:0.375rem 0.75rem; font-size:0.9rem; background:white;">
+            <option>Zoradenie &amp; filtre</option>
+            <option>Alfab. (A&ndash;Z)</option>
+            <option>Najväčšia návštevnosť</option>
+            <option>Nevložené</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:200px;">Názov</th>
+              <th>Produkty</th>
+              <th class="text-right">Vytvorenie</th>
+              <th class="text-center">Vložený</th>
+              <th class="text-right" title="Zobrazenia za posledných 7 dní">7d 👁</th>
+              <th class="text-right" title="CTR za posledných 7 dní">7d CTR</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a href="widget-stats.html" style="color:var(--dark); text-decoration:none;">
+                  <div style="font-weight:600;">Odporúčané produkty &mdash; HP</div>
+                  <div style="font-size:0.78rem; color:var(--muted);">Template 5</div>
+                </a>
+              </td>
+              <td>
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+              </td>
+              <td class="text-right text-muted">12.3.2025</td>
+              <td class="text-center"><span style="color:var(--success)">&#10003;</span></td>
+              <td class="text-right">1 841</td>
+              <td class="text-right"><span class="text-success">6.1%</span></td>
+              <td class="text-right" style="white-space:nowrap;">
+                <a href="#" class="btn btn-success btn-sm" title="Upraviť">✏️</a>
+                <a href="#" class="btn btn-success btn-sm" title="Kopírovať">📋</a>
+                <a href="#" class="btn btn-success btn-sm" title="Vložiť">🪄</a>
+                <a href="#" class="btn btn-danger btn-sm" title="Zmazať">🗑</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="widget-stats.html" style="color:var(--dark); text-decoration:none;">
+                  <div style="font-weight:600;">Podobné produkty</div>
+                  <div style="font-size:0.78rem; color:var(--muted);">Template 8</div>
+                </a>
+              </td>
+              <td>
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+              </td>
+              <td class="text-right text-muted">5.2.2025</td>
+              <td class="text-center"><span style="color:var(--success)">&#10003;</span></td>
+              <td class="text-right">1 320</td>
+              <td class="text-right"><span class="text-success">4.6%</span></td>
+              <td class="text-right" style="white-space:nowrap;">
+                <a href="#" class="btn btn-success btn-sm">✏️</a>
+                <a href="#" class="btn btn-success btn-sm">📋</a>
+                <a href="#" class="btn btn-success btn-sm">🪄</a>
+                <a href="#" class="btn btn-danger btn-sm">🗑</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="widget-stats.html" style="color:var(--dark); text-decoration:none;">
+                  <div style="font-weight:600;">Top predaje &mdash; sidebar</div>
+                  <div style="font-size:0.78rem; color:var(--muted);">Template 3</div>
+                </a>
+              </td>
+              <td>
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+              </td>
+              <td class="text-right text-muted">18.1.2025</td>
+              <td class="text-center"><span style="color:var(--success)">&#10003;</span></td>
+              <td class="text-right">920</td>
+              <td class="text-right">3.7%</td>
+              <td class="text-right" style="white-space:nowrap;">
+                <a href="#" class="btn btn-success btn-sm">✏️</a>
+                <a href="#" class="btn btn-success btn-sm">📋</a>
+                <a href="#" class="btn btn-success btn-sm">🪄</a>
+                <a href="#" class="btn btn-danger btn-sm">🗑</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="widget-stats.html" style="color:var(--dark); text-decoration:none;">
+                  <div style="font-weight:600;">Nové produkty</div>
+                  <div style="font-size:0.78rem; color:var(--muted);">Template 1</div>
+                </a>
+              </td>
+              <td>
+                <img src="https://placehold.co/36x36/e9ecef/6c757d?text=P" class="img-thumb">
+              </td>
+              <td class="text-right text-muted">3.12.2024</td>
+              <td class="text-center"><span style="color:var(--muted);">&#8212;</span></td>
+              <td class="text-right text-muted">210</td>
+              <td class="text-right text-muted">1.2%</td>
+              <td class="text-right" style="white-space:nowrap;">
+                <a href="#" class="btn btn-success btn-sm">✏️</a>
+                <a href="#" class="btn btn-success btn-sm">📋</a>
+                <a href="#" class="btn btn-success btn-sm">🪄</a>
+                <a href="#" class="btn btn-danger btn-sm">🗑</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:1rem;">
+      <a href="index.html" style="color:var(--muted); font-size:0.85rem;">&larr; Späť na prehľad</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>

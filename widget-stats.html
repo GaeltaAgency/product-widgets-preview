@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Štatistiky — Product Widgets v2</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">&#9632; Product Widgets</div>
+    <div class="sidebar-nav">
+      <a href="dashboard.html"><span class="icon">📊</span> Štatistiky</a>
+      <a href="widgets.html" class="active"><span class="icon">🧱</span> Widgety</a>
+      <a href="#"><span class="icon">🗄</span> Dáta</a>
+      <a href="#"><span class="icon">💳</span> Predplatné</a>
+      <a href="#"><span class="icon">&#9881;</span> Nastavenía</a>
+    </div>
+    <div class="sidebar-footer">
+      <div style="font-weight:600; color:white; margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
+      <div>modabella.sk</div>
+      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a; font-weight:600;">Starter</span></div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Widget header -->
+    <div class="card">
+      <div class="card-header" style="flex-wrap:wrap; gap:0.5rem;">
+        <h1>🧱 Odporúčané produkty &mdash; HP
+          <span class="badge badge-secondary" style="font-size:0.7rem; vertical-align:middle;">Template 5</span>
+        </h1>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="#" class="btn btn-success btn-sm">✏️ Upraviť</a>
+          <a href="#" class="btn btn-success btn-sm">📋 Kopírovať</a>
+          <a href="#" class="btn btn-success btn-sm">🪄 Vložiť</a>
+          <a href="widgets.html" class="btn btn-outline btn-sm">&larr; Späť</a>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Časový filter -->
+        <div class="time-filter">
+          <span style="font-weight:600; color:var(--dark); margin-right:0.25rem;">Obdobie:</span>
+          <a href="#">7 dní</a>
+          <a href="#" class="active">30 dní</a>
+          <a href="#">90 dní</a>
+          <a href="#" class="ml-auto btn btn-outline btn-sm">📅 Export CSV</a>
+        </div>
+
+        <!-- KPI karty -->
+        <div class="metric-row">
+          <div class="metric">
+            <p class="metric-label">Zobrazenia</p>
+            <p class="metric-value">6 420</p>
+            <p class="metric-sub">za posledných 30 dní</p>
+          </div>
+          <div class="metric">
+            <p class="metric-label">Kliky</p>
+            <p class="metric-value">389</p>
+            <p class="metric-sub">za posledných 30 dní</p>
+          </div>
+          <div class="metric">
+            <p class="metric-label">CTR</p>
+            <p class="metric-value" style="color:var(--success);">6.06%</p>
+            <p class="metric-sub">kliky / zobrazenia</p>
+          </div>
+        </div>
+
+        <!-- Graf -->
+        <div id="widget-chart" class="chart-container"></div>
+
+        <!-- Top URL tabuľka -->
+        <h2 class="section-title" style="margin-top:1.5rem;">Zobrazenia podľa stránky</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th class="text-right">Zobrazenia</th>
+              <th class="text-right">Kliky</th>
+              <th class="text-right">CTR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="#" style="color:var(--green);">modabella.sk/</a></td>
+              <td class="text-right">2 840</td>
+              <td class="text-right">198</td>
+              <td class="text-right"><span class="text-success">6.97%</span></td>
+            </tr>
+            <tr>
+              <td><a href="#" style="color:var(--green);">modabella.sk/novinky</a></td>
+              <td class="text-right">1 920</td>
+              <td class="text-right">104</td>
+              <td class="text-right"><span class="text-success">5.42%</span></td>
+            </tr>
+            <tr>
+              <td><a href="#" style="color:var(--green);">modabella.sk/saty</a></td>
+              <td class="text-right">1 100</td>
+              <td class="text-right">61</td>
+              <td class="text-right">5.55%</td>
+            </tr>
+            <tr>
+              <td><a href="#" style="color:var(--green);">modabella.sk/vypredaj</a></td>
+              <td class="text-right">410</td>
+              <td class="text-right">18</td>
+              <td class="text-right text-muted">4.39%</td>
+            </tr>
+            <tr>
+              <td><a href="#" style="color:var(--green);">modabella.sk/kontakt</a></td>
+              <td class="text-right">150</td>
+              <td class="text-right">8</td>
+              <td class="text-right text-muted">5.33%</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:0.5rem;">
+      <a href="index.html" style="color:var(--muted); font-size:0.85rem;">&larr; Späť na prehľad</a>
+    </div>
+  </main>
+</div>
+
+<script>
+const days = [];
+const base = new Date('2025-03-11');
+for (let i = 0; i < 30; i++) {
+  const d = new Date(base);
+  d.setDate(base.getDate() + i);
+  days.push(d.toISOString().split('T')[0]);
+}
+
+const seed = (i) => Math.sin(i * 7.3 + 1.1);
+const renders = days.map((_, i) => Math.round(180 + 60 * seed(i) + i * 3.5));
+const clicks  = renders.map((r, i) => Math.round(r * (0.05 + 0.025 * seed(i + 5))));
+
+const vals = [
+  ...days.map((d, i) => ({ datum: d, hodnota: renders[i], typ: 'Zobrazenia' })),
+  ...days.map((d, i) => ({ datum: d, hodnota: clicks[i],  typ: 'Kliky' }))
+];
+
+vegaEmbed('#widget-chart', {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  width: "container", height: 200,
+  data: { values: vals },
+  mark: { type: "line", interpolate: "monotone", strokeWidth: 2, point: { filled: true, size: 45 } },
+  encoding: {
+    x: { field: "datum", type: "temporal", title: null, axis: { labelAngle: -30, labelFontSize: 11, tickCount: 8 } },
+    y: { field: "hodnota", type: "quantitative", title: null },
+    color: {
+      field: "typ", type: "nominal",
+      scale: { domain: ["Zobrazenia", "Kliky"], range: ["#00a28a", "#4a90d9"] },
+      legend: { orient: "top-left", labelFontSize: 12 }
+    },
+    tooltip: [
+      { field: "datum", type: "temporal", title: "Dátum" },
+      { field: "typ", title: "Typ" },
+      { field: "hodnota", title: "Počet", format: "," }
+    ]
+  }
+}, { actions: false, mode: "vega-lite" });
+</script>
+</body>
+</html>

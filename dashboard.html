@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Product Widgets v2</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">&#9632; Product Widgets</div>
+    <div class="sidebar-nav">
+      <a href="dashboard.html" class="active"><span class="icon">📊</span> Štatistiky</a>
+      <a href="widgets.html"><span class="icon">🧱</span> Widgety</a>
+      <a href="#"><span class="icon">🗄</span> Dáta</a>
+      <a href="#"><span class="icon">💳</span> Predplatné</a>
+      <a href="#"><span class="icon">&#9881;</span> Nastavenía</a>
+    </div>
+    <div class="sidebar-footer">
+      <div style="font-weight:600; color:white; margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
+      <div>modabella.sk</div>
+      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a; font-weight:600;">Starter</span></div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-title">📊 Štatistiky</div>
+
+    <!-- SOFT LIMIT BANNER -->
+    <div class="alert alert-warning">
+      <div>
+        <strong>Blížite sa k limitu zobrazení.</strong>
+        Tento mesiac: <strong>17 340</strong> z <strong>20 000</strong> (87%)
+      </div>
+      <a href="#" class="btn btn-warning btn-sm">Prejsť na Pro</a>
+    </div>
+
+    <!-- KPI KARTY -->
+    <div class="metric-row">
+      <div class="metric">
+        <p class="metric-label">Zobrazenia (30 dní)</p>
+        <p class="metric-value">17 340</p>
+        <p class="metric-sub">&uarr; +12% vs min. mesiac</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">Kliky (30 dní)</p>
+        <p class="metric-value">841</p>
+        <p class="metric-sub">&uarr; +8% vs min. mesiac</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">Priemerné CTR</p>
+        <p class="metric-value">4.85%</p>
+        <p class="metric-sub">kliky / zobrazenia</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">Aktívne widgety</p>
+        <p class="metric-value">8 <span style="font-size:1rem; font-weight:400; color:#6c757d;">/ 10</span></p>
+        <p class="metric-sub">2 volné sloty</p>
+      </div>
+    </div>
+
+    <!-- GRAF -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Štatistiky po mesiacoch</h2>
+      </div>
+      <div class="card-body">
+        <div id="dashboard-chart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- TOP WIDGETY -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Top widgety podľa CTR</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Názov</th>
+            <th class="text-right">Zobrazenia</th>
+            <th class="text-right">Kliky</th>
+            <th class="text-right">CTR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Odporúčané produkty &mdash; HP</a>
+              <div style="font-size:0.78rem; color:var(--muted);">Template 5</div>
+            </td>
+            <td class="text-right">6 420</td>
+            <td class="text-right">389</td>
+            <td class="text-right"><span class="text-success">6.06%</span></td>
+          </tr>
+          <tr>
+            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Podobné produkty</a>
+              <div style="font-size:0.78rem; color:var(--muted);">Template 8</div>
+            </td>
+            <td class="text-right">5 210</td>
+            <td class="text-right">241</td>
+            <td class="text-right"><span class="text-success">4.63%</span></td>
+          </tr>
+          <tr>
+            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Top predaje &mdash; sidebar</a>
+              <div style="font-size:0.78rem; color:var(--muted);">Template 3</div>
+            </td>
+            <td class="text-right">3 810</td>
+            <td class="text-right">142</td>
+            <td class="text-right">3.73%</td>
+          </tr>
+          <tr>
+            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Nové produkty</a>
+              <div style="font-size:0.78rem; color:var(--muted);">Template 1</div>
+            </td>
+            <td class="text-right">1 900</td>
+            <td class="text-right">69</td>
+            <td class="text-right">3.63%</td>
+          </tr>
+          <tr>
+            <td><a href="widget-stats.html" style="font-weight:600; color:var(--dark); text-decoration:none;">Akciové produkty</a>
+              <div style="font-size:0.78rem; color:var(--muted);">Template 2</div>
+            </td>
+            <td class="text-right">1 340</td>
+            <td class="text-right">34</td>
+            <td class="text-right text-muted">2.54%</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><strong>Celkom</strong></td>
+            <td class="text-right">17 340</td>
+            <td class="text-right">841</td>
+            <td class="text-right">4.85%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div style="text-align:center; margin-top:1rem;">
+      <a href="index.html" style="color:var(--muted); font-size:0.85rem;">&larr; Späť na prehľad</a>
+    </div>
+  </main>
+</div>
+
+<script>
+const data = [
+  {m:'11/2024', z:3100, k:134}, {m:'12/2024', z:5200, k:221},
+  {m:'01/2025', z:6800, k:290}, {m:'02/2025', z:7100, k:318},
+  {m:'03/2025', z:9400, k:401}, {m:'04/2025', z:11200, k:498},
+  {m:'05/2025', z:10800, k:477}, {m:'06/2025', z:12400, k:531},
+  {m:'07/2025', z:13100, k:562}, {m:'08/2025', z:14200, k:603},
+  {m:'09/2025', z:15800, k:671}, {m:'10/2025', z:17340, k:841}
+];
+
+const vals = [
+  ...data.map(d => ({ mesiac: d.m, hodnota: d.z, typ: 'Zobrazenia' })),
+  ...data.map(d => ({ mesiac: d.m, hodnota: d.k, typ: 'Kliky' }))
+];
+
+vegaEmbed('#dashboard-chart', {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  width: "container", height: 220,
+  data: { values: vals },
+  mark: { type: "line", interpolate: "monotone", strokeWidth: 2.5, point: { filled: true, size: 50 } },
+  encoding: {
+    x: { field: "mesiac", type: "nominal", sort: null, title: null, axis: { labelAngle: -30, labelFontSize: 12 } },
+    y: { field: "hodnota", type: "quantitative", title: null },
+    color: {
+      field: "typ", type: "nominal",
+      scale: { domain: ["Zobrazenia", "Kliky"], range: ["#00a28a", "#4a90d9"] },
+      legend: { orient: "top-left", labelFontSize: 12 }
+    },
+    tooltip: [
+      { field: "mesiac", title: "Mesiac" },
+      { field: "typ", title: "Typ" },
+      { field: "hodnota", title: "Počet", format: "," }
+    ]
+  }
+}, { actions: false, mode: "vega-lite" });
+</script>
+</body>
+</html>
