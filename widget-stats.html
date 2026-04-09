@@ -9,34 +9,40 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <style>
-    .kpi-delta { font-size:0.75rem; font-weight:600; padding:0.15rem 0.5rem; border-radius:4px; display:inline-block; margin-top:0.25rem; }
-    .kpi-delta.up   { background:#d4edda; color:#155724; }
-    .kpi-delta.down { background:#f8d7da; color:#721c24; }
-    .kpi-delta.none { background:#e9ecef; color:#6c757d; }
-    .sort-th { cursor:pointer; user-select:none; white-space:nowrap; }
-    .sort-th:hover { color:var(--green); }
-    .sort-th.active { color:var(--green); }
-    .period-btn.active { background:var(--green)!important; color:white!important; border-color:var(--green)!important; }
+    .kpi-delta{font-size:.75rem;font-weight:600;padding:.15rem .5rem;border-radius:4px;display:inline-block;margin-top:.25rem}
+    .kpi-delta.up{background:#d4edda;color:#155724}
+    .kpi-delta.down{background:#f8d7da;color:#721c24}
+    .kpi-delta.none{background:#e9ecef;color:#6c757d}
+    .sort-th{cursor:pointer;user-select:none;white-space:nowrap}
+    .sort-th:hover,.sort-th.active{color:var(--green)}
+    .period-btn.active{background:var(--green)!important;color:white!important;border-color:var(--green)!important}
     /* Dropdown */
-    .dropdown { position:relative; display:inline-block; }
-    .dropdown-menu {
-      display:none; position:absolute; right:0; top:calc(100% + 4px);
-      background:white; border:1px solid var(--border); border-radius:6px;
-      min-width:200px; box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:100;
+    .dropdown{position:relative;display:inline-block}
+    .dropdown-menu{display:none;position:absolute;right:0;top:calc(100% + 4px);background:white;border:1px solid var(--border);border-radius:6px;min-width:220px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100}
+    .dropdown-menu.open{display:block}
+    .dropdown-item{display:block;padding:.5rem 1rem;font-size:.875rem;color:var(--dark);text-decoration:none;border-bottom:1px solid var(--border)}
+    .dropdown-item:last-child{border-bottom:none}
+    .dropdown-item:hover{background:var(--bg);color:var(--green)}
+    .dropdown-label{font-size:.72rem;color:var(--muted);padding:.4rem 1rem .2rem;font-weight:600;text-transform:uppercase}
+    /* Heatmapa */
+    .heatmap-wrap{margin-top:1.5rem}
+    .heatmap-table td,.heatmap-table th{padding:0;line-height:1}
+    .hm-cell{
+      width:22px;height:22px;border-radius:3px;display:inline-flex;
+      align-items:center;justify-content:center;font-size:.62rem;
+      cursor:default;transition:transform .1s;
     }
-    .dropdown-menu.open { display:block; }
-    .dropdown-item {
-      display:block; padding:0.55rem 1rem; font-size:0.875rem;
-      color:var(--dark); text-decoration:none;
-      border-bottom:1px solid var(--border);
-    }
-    .dropdown-item:last-child { border-bottom:none; }
-    .dropdown-item:hover { background:var(--bg); color:var(--green); }
-    .dropdown-label { font-size:0.72rem; color:var(--muted); padding:0.4rem 1rem 0.2rem; font-weight:600; text-transform:uppercase; }
-    /* Legend dots pre graf */
-    .chart-legend { display:flex; gap:1.25rem; margin-bottom:0.5rem; font-size:0.82rem; }
-    .chart-legend span { display:flex; align-items:center; gap:0.35rem; }
-    .dot { width:10px; height:10px; border-radius:2px; display:inline-block; }
+    .hm-cell:hover{transform:scale(1.35);z-index:10;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .hm-row{display:flex;align-items:center;gap:2px;margin-bottom:2px}
+    .hm-label{width:22px;font-size:.75rem;font-weight:600;color:#495057;text-align:right;padding-right:5px;flex-shrink:0}
+    .hm-hour{width:22px;text-align:center;font-size:.7rem;color:#6c757d;flex-shrink:0}
+    .hm-legend{display:flex;align-items:center;gap:.35rem;font-size:.78rem;color:#6c757d;margin-top:.5rem}
+    .hm-legend-dot{width:16px;height:16px;border-radius:2px;flex-shrink:0}
+    .insight-box{background:#f0faf7;border:1px solid #c8ede5;border-radius:6px;padding:.6rem .9rem;margin-top:.75rem;font-size:.82rem;}
+    /* Chart legend */
+    .chart-legend{display:flex;gap:1.2rem;margin-bottom:.4rem;font-size:.82rem}
+    .chart-legend span{display:flex;align-items:center;gap:.3rem}
+    .dot-sq{width:10px;height:10px;border-radius:2px;display:inline-block}
   </style>
 </head>
 <body>
@@ -52,19 +58,19 @@
       <a href="#"><span class="icon">&#9881;</span> Nastavenía</a>
     </div>
     <div class="sidebar-footer">
-      <div style="font-weight:600;color:white;margin-bottom:0.25rem;">Moda Bella s.r.o.</div>
+      <div style="font-weight:600;color:white;margin-bottom:.25rem">Moda Bella s.r.o.</div>
       <div>modabella.sk</div>
-      <div style="margin-top:0.5rem;">Plán: <span style="color:#00a28a;font-weight:600;">Starter</span></div>
+      <div style="margin-top:.5rem">Plán: <span style="color:#00a28a;font-weight:600">Starter</span></div>
     </div>
   </nav>
 
   <main class="main">
     <div class="card">
-      <div class="card-header" style="flex-wrap:wrap;gap:0.5rem;">
+      <div class="card-header" style="flex-wrap:wrap;gap:.5rem">
         <h1>🧱 Odporúčané produkty &mdash; HP
-          <span class="badge badge-secondary" style="font-size:0.7rem;vertical-align:middle;">Template 5</span>
+          <span class="badge badge-secondary" style="font-size:.7rem;vertical-align:middle">Template 5</span>
         </h1>
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
           <a href="#" class="btn btn-success btn-sm">✏️ Upraviť</a>
           <a href="#" class="btn btn-success btn-sm">📋 Kopírovať</a>
           <a href="#" class="btn btn-success btn-sm">🪄 Vložiť</a>
@@ -74,73 +80,94 @@
 
       <div class="card-body">
 
-        <!-- CASOVY FILTER + CSV DROPDOWN -->
-        <div class="time-filter" style="margin-bottom:0.5rem;">
-          <span style="font-weight:600;color:var(--dark);margin-right:0.25rem;">Obdobie:</span>
+        <!-- CASOVY FILTER -->
+        <div class="time-filter" style="margin-bottom:.5rem">
+          <span style="font-weight:600;color:var(--dark);margin-right:.25rem">Obdobie:</span>
           <a href="#" class="period-btn" data-days="7">7 dní</a>
           <a href="#" class="period-btn active" data-days="30">30 dní</a>
           <a href="#" class="period-btn" data-days="90">90 dní</a>
           <a href="#" class="period-btn" data-days="180">180 dní</a>
-
-          <!-- #9: CSV Export dropdown -->
           <div class="dropdown ml-auto">
-            <button class="btn btn-outline btn-sm" id="csv-btn"
-                    onclick="document.getElementById('csv-menu').classList.toggle('open');event.stopPropagation();">
+            <button class="btn btn-outline btn-sm" onclick="toggleMenu();event.stopPropagation()">
               📅 Export CSV &#9660;
             </button>
             <div class="dropdown-menu" id="csv-menu">
               <div class="dropdown-label">Vyberte obsah</div>
-              <a href="#" class="dropdown-item" onclick="fakeDownload('full');return false;">
+              <a href="#" class="dropdown-item" onclick="fakeDownload('full');return false">
                 📄 Kompletný export
-                <div style="font-size:0.75rem;color:var(--muted);">Summary + denné dáta + URL breakdown</div>
+                <div style="font-size:.75rem;color:var(--muted)">Summary + denné dáta + URL breakdown</div>
               </a>
-              <a href="#" class="dropdown-item" onclick="fakeDownload('daily');return false;">
-                📅 Len denné dáta
-              </a>
-              <a href="#" class="dropdown-item" onclick="fakeDownload('urls');return false;">
-                🔗 Len URL breakdown
-              </a>
+              <a href="#" class="dropdown-item" onclick="fakeDownload('daily');return false">📅 Len denné dáta</a>
+              <a href="#" class="dropdown-item" onclick="fakeDownload('urls');return false">🔗 Len URL breakdown</a>
             </div>
           </div>
         </div>
-
-        <p id="period-info" style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;">
+        <p id="period-info" style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">
           Zobrazujú sa dáta za: <strong>posledných 30 dní</strong>
-          &nbsp;&middot;&nbsp;Porovnanie vs. 2.3.2025 &ndash; 1.4.2025
         </p>
 
-        <!-- KPI KARTY s delta -->
-        <div class="metric-row" id="kpi-row">
+        <!-- KPI -->
+        <div class="metric-row">
           <div class="metric">
             <p class="metric-label">Zobrazenia</p>
             <p class="metric-value" id="val-renders">6 420</p>
             <span class="kpi-delta up" id="delta-renders">&uarr; +18% vs. predch. 30 dní</span>
-            <p class="metric-sub" style="margin-top:0.25rem;" id="prev-renders">predch.: 5 440</p>
+            <p class="metric-sub" id="prev-renders">predch.: 5 440</p>
           </div>
           <div class="metric">
             <p class="metric-label">Kliky</p>
             <p class="metric-value" id="val-clicks">389</p>
             <span class="kpi-delta down" id="delta-clicks">&darr; -3% vs. predch. 30 dní</span>
-            <p class="metric-sub" style="margin-top:0.25rem;" id="prev-clicks">predch.: 401</p>
+            <p class="metric-sub" id="prev-clicks">predch.: 401</p>
           </div>
           <div class="metric">
             <p class="metric-label">CTR</p>
-            <p class="metric-value" id="val-ctr" style="color:var(--success);">6.06%</p>
+            <p class="metric-value" id="val-ctr" style="color:var(--success)">6.06%</p>
             <span class="kpi-delta up" id="delta-ctr">&uarr; +0.6% vs. predch. 30 dní</span>
-            <p class="metric-sub" style="margin-top:0.25rem;" id="prev-ctr">predch.: 5.7%</p>
+            <p class="metric-sub" id="prev-ctr">predch.: 5.7%</p>
           </div>
         </div>
 
-        <!-- #2: BAR + LINE GRAF -->
-        <div class="chart-legend">
-          <span><span class="dot" style="background:#00a28a;"></span> Zobrazenia</span>
-          <span><span class="dot" style="background:#4a90d9;"></span> Kliky</span>
-          <span><span class="dot" style="background:#f59e0b;border-radius:50%;"></span> CTR % (pravá os)</span>
+        <!-- BAR + LINE GRAF -->
+        <div class="chart-legend" style="margin-top:1rem">
+          <span><span class="dot-sq" style="background:#00a28a"></span> Zobrazenia</span>
+          <span><span class="dot-sq" style="background:#4a90d9"></span> Kliky</span>
+          <span><span class="dot-sq" style="background:#f59e0b;border-radius:50%"></span> CTR % (pravá os)</span>
         </div>
-        <div id="widget-chart" style="width:100%;min-height:240px;"></div>
+        <div id="widget-chart" style="width:100%;min-height:240px"></div>
+
+        <!-- #6 HEATMAPA -->
+        <div class="heatmap-wrap">
+          <h2 class="section-title">
+            ⏰ Aktivita podľa dňa a hodiny
+            <span style="font-size:.8rem;font-weight:400;color:var(--muted)" id="hm-period-label">(posledných 30 dní)</span>
+          </h2>
+
+          <div id="heatmap-container" style="overflow-x:auto;padding-bottom:.5rem"></div>
+
+          <div class="hm-legend">
+            <span>Menej</span>
+            <span class="hm-legend-dot" style="background:#f0f0f0"></span>
+            <span class="hm-legend-dot" style="background:#c8ede5"></span>
+            <span class="hm-legend-dot" style="background:#80cfbf"></span>
+            <span class="hm-legend-dot" style="background:#40b09a"></span>
+            <span class="hm-legend-dot" style="background:#00a28a"></span>
+            <span>Viac</span>
+            <span style="margin-left:.75rem;color:var(--muted)">
+              Max: <strong id="hm-max">248</strong> zobr./hodinu
+            </span>
+          </div>
+
+          <div class="insight-box" id="hm-insight">
+            💡 <strong>Najväčšia aktivita:</strong>
+            <span id="hm-best">Pi 18:00 &mdash; 248 zobr.</span>
+            &nbsp;&middot;&nbsp;
+            <span style="color:var(--muted)">Zvážte nasadenie flash akcií 1&ndash;2h pred týmto časom.</span>
+          </div>
+        </div>
 
         <!-- URL TABULKA -->
-        <h2 class="section-title" id="url-stats" style="margin-top:1.5rem;">
+        <h2 class="section-title" id="url-stats" style="margin-top:1.5rem">
           Zobrazenia podľa stránky
         </h2>
         <table id="url-table">
@@ -150,54 +177,127 @@
               <th class="text-right sort-th active desc" onclick="sortUrl('renders')" id="th-renders">Zobrazenia <span class="arrow">&#9660;</span></th>
               <th class="text-right sort-th" onclick="sortUrl('clicks')" id="th-clicks">Kliky <span class="arrow"></span></th>
               <th class="text-right sort-th" onclick="sortUrl('ctr')" id="th-ctr">CTR <span class="arrow"></span></th>
-              <th class="text-right sort-th" onclick="sortUrl('first_seen')" id="th-first_seen"
-                  title="Dátum kedy sa widget prvykrát zobrazil na tejto stránke">1. zobr. (?)<span class="arrow"></span></th>
+              <th class="text-right sort-th" onclick="sortUrl('first_seen')" id="th-first_seen" title="Dátum prvého zobrazenia">1. zobr. (?)<span class="arrow"></span></th>
             </tr>
           </thead>
           <tbody id="url-tbody"></tbody>
         </table>
-        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.35rem;">
+        <p style="font-size:.78rem;color:var(--muted);margin-top:.35rem">
           “1. zobr.” = dátum kedy sa widget prvykrát zobrazil na danej stránke.
         </p>
-
       </div>
     </div>
-
-    <div style="text-align:center;margin-top:0.5rem;">
-      <a href="index.html" style="color:var(--muted);font-size:0.85rem;">&larr; Späť na prehľad</a>
+    <div style="text-align:center;margin-top:.5rem">
+      <a href="index.html" style="color:var(--muted);font-size:.85rem">&larr; Späť na prehľad</a>
     </div>
   </main>
 </div>
 
 <script>
-const PERIODS = {
-  7:   { renders:1841, clicks:112, ctr:6.1,  prev_r:1602, prev_c:101, prev_ctr:5.8 },
-  30:  { renders:6420, clicks:389, ctr:6.06, prev_r:5440, prev_c:401, prev_ctr:5.7 },
-  90:  { renders:17340,clicks:987, ctr:5.69, prev_r:13200,prev_c:820, prev_ctr:5.2 },
-  180: { renders:32100,clicks:1820,ctr:5.67, prev_r:24800,prev_c:1340,prev_ctr:5.4 }
+const PERIODS={
+  7: {renders:1841,clicks:112,ctr:6.1, prev_r:1602,prev_c:101, prev_ctr:5.8},
+  30:{renders:6420,clicks:389,ctr:6.06,prev_r:5440,prev_c:401, prev_ctr:5.7},
+  90:{renders:17340,clicks:987,ctr:5.69,prev_r:13200,prev_c:820,prev_ctr:5.2},
+  180:{renders:32100,clicks:1820,ctr:5.67,prev_r:24800,prev_c:1340,prev_ctr:5.4}
 };
-
-const URL_DATA = [
-  { url:'modabella.sk/',         renders:2840,clicks:198,ctr:6.97,first_seen:'2024-10-15' },
-  { url:'modabella.sk/novinky',  renders:1920,clicks:104,ctr:5.42,first_seen:'2024-11-02' },
-  { url:'modabella.sk/saty',     renders:1100,clicks:61, ctr:5.55,first_seen:'2024-12-10' },
-  { url:'modabella.sk/vypredaj', renders:410, clicks:18, ctr:4.39,first_seen:'2025-01-08' },
-  { url:'modabella.sk/kontakt',  renders:150, clicks:8,  ctr:5.33,first_seen:'2025-02-20' },
-  { url:'modabella.sk/blog/jar', renders:92,  clicks:2,  ctr:2.17,first_seen:'2025-03-28' },
-  { url:'modabella.sk/o-nas',    renders:61,  clicks:1,  ctr:1.64,first_seen:'2025-04-01' },
+const URL_DATA=[
+  {url:'modabella.sk/',         renders:2840,clicks:198,ctr:6.97,first_seen:'2024-10-15'},
+  {url:'modabella.sk/novinky',  renders:1920,clicks:104,ctr:5.42,first_seen:'2024-11-02'},
+  {url:'modabella.sk/saty',     renders:1100,clicks:61, ctr:5.55,first_seen:'2024-12-10'},
+  {url:'modabella.sk/vypredaj', renders:410, clicks:18, ctr:4.39,first_seen:'2025-01-08'},
+  {url:'modabella.sk/kontakt',  renders:150, clicks:8,  ctr:5.33,first_seen:'2025-02-20'},
+  {url:'modabella.sk/blog/jar', renders:92,  clicks:2,  ctr:2.17,first_seen:'2025-03-28'},
+  {url:'modabella.sk/o-nas',    renders:61,  clicks:1,  ctr:1.64,first_seen:'2025-04-01'},
 ];
+
+const DOW_ORDER=[1,2,3,4,5,6,0];
+const DOW_LABELS={0:'Ne',1:'Po',2:'Ut',3:'St',4:'Št',5:'Pi',6:'So'};
+const HOURS=Array.from({length:24},(_,i)=>i);
 
 let urlSortKey='renders', urlSortDir='desc';
 
-function fmt(n) { return Number(n).toLocaleString('sk-SK'); }
-function delta(c,p) { return p&&p>0 ? Math.round((c-p)/p*1000)/10 : null; }
-function ctrColor(v) {
-  if(v>=5) return 'color:var(--success);font-weight:600;';
-  if(v>0)  return '';
-  return 'color:var(--muted);';
+function fmt(n){return Number(n).toLocaleString('sk-SK');}
+function delta(c,p){return p&&p>0?Math.round((c-p)/p*1000)/10:null;}
+function ctrColor(v){return v>=5?'color:var(--success);font-weight:600':v>0?'':'color:var(--muted)';}
+
+// Generuje pseudonáhodné ale deterministicke heatmap data
+function generateHeatmap(days){
+  const seed=(dow,hour)=>Math.abs(Math.sin(dow*17+hour*7.3+days*0.1));
+  // Simulacia: Pi/Št 17-20h je peak, So-Ne rano je nizky
+  const peakDow=[4,3]; // Pi, Št
+  const hm={};
+  let maxVal=0;
+  for(const dow of [0,1,2,3,4,5,6]){
+    for(const hour of HOURS){
+      const isPeak=peakDow.includes(dow)&&hour>=17&&hour<=20;
+      const isWeekendMorning=(dow===0||dow===6)&&hour>=7&&hour<=10;
+      const base=seed(dow,hour);
+      let val=Math.round(
+        isPeak         ? 180+base*80  :
+        isWeekendMorning? 60+base*40  :
+        hour<6         ? 5+base*10   :
+                          40+base*60
+      );
+      val=Math.round(val*(days/30));
+      hm[dow+'_'+hour]=val;
+      if(val>maxVal) maxVal=val;
+    }
+  }
+  return{hm,maxVal};
 }
 
-function updateKPI(days) {
+function hmColor(pct){
+  if(pct===0) return '#f0f0f0';
+  if(pct<.25)  return '#c8ede5';
+  if(pct<.5)   return '#80cfbf';
+  if(pct<.75)  return '#40b09a';
+  return '#00a28a';
+}
+
+function renderHeatmap(days){
+  const {hm,maxVal}=generateHeatmap(days);
+  document.getElementById('hm-max').textContent=fmt(maxVal);
+  document.getElementById('hm-period-label').textContent='(posledných '+days+' dní)';
+
+  // Nájdi best cell
+  let bestDow=4, bestHour=18, bestVal=0;
+  for(const dow of [0,1,2,3,4,5,6]){
+    for(const hour of HOURS){
+      const v=hm[dow+'_'+hour]||0;
+      if(v>bestVal){bestVal=v;bestDow=dow;bestHour=hour;}
+    }
+  }
+  document.getElementById('hm-best').innerHTML=
+    DOW_LABELS[bestDow]+' '+String(bestHour).padStart(2,'0')+':00 &mdash; '+fmt(bestVal)+' zobr.';
+
+  // Render
+  let html='';
+  // Hlavicka hodin
+  html+='<div style="display:flex;gap:2px;margin-bottom:3px;margin-left:27px">';
+  HOURS.forEach(h=>{
+    // Zobraz len kazdu druhu hodinu, inak sa to nezmesti
+    html+=`<div class="hm-hour">${h%2===0?String(h).padStart(2,'0'):''}</div>`;
+  });
+  html+='</div>';
+
+  DOW_ORDER.forEach(dow=>{
+    html+=`<div class="hm-row"><div class="hm-label">${DOW_LABELS[dow]}</div>`;
+    HOURS.forEach(hour=>{
+      const val=hm[dow+'_'+hour]||0;
+      const pct=maxVal>0?val/maxVal:0;
+      const bg=hmColor(pct);
+      const textColor=pct>=.75?'white':'transparent';
+      const label=val>=1000?Math.round(val/100)/10+'k':(pct>=.5&&val>0?val:'');
+      html+=`<div class="hm-cell" style="background:${bg};color:${textColor}"
+        title="${DOW_LABELS[dow]} ${String(hour).padStart(2,'0')}:00 — ${fmt(val)} zobr.">${label}</div>`;
+    });
+    html+='</div>';
+  });
+
+  document.getElementById('heatmap-container').innerHTML=html;
+}
+
+function updateKPI(days){
   const p=PERIODS[days], lbl=days+'\xa0dní';
   document.getElementById('val-renders').textContent=fmt(p.renders);
   document.getElementById('val-clicks').textContent=fmt(p.clicks);
@@ -205,35 +305,31 @@ function updateKPI(days) {
   document.getElementById('prev-renders').textContent='predch.: '+fmt(p.prev_r);
   document.getElementById('prev-clicks').textContent='predch.: '+fmt(p.prev_c);
   document.getElementById('prev-ctr').textContent='predch.: '+p.prev_ctr+'%';
-
-  const dR=delta(p.renders,p.prev_r), dC=delta(p.clicks,p.prev_c), dCtr=delta(p.ctr,p.prev_ctr);
-  function badge(d,id) {
+  const dR=delta(p.renders,p.prev_r),dC=delta(p.clicks,p.prev_c),dCtr=delta(p.ctr,p.prev_ctr);
+  function badge(d,id){
     const el=document.getElementById(id);
     if(d===null){el.className='kpi-delta none';el.innerHTML='nedostatok dát';return;}
     el.className='kpi-delta '+(d>=0?'up':'down');
     el.innerHTML=(d>=0?'&uarr;':'&darr;')+' '+Math.abs(d)+'% vs. predch. '+lbl;
   }
-  badge(dR,'delta-renders'); badge(dC,'delta-clicks'); badge(dCtr,'delta-ctr');
-
+  badge(dR,'delta-renders');badge(dC,'delta-clicks');badge(dCtr,'delta-ctr');
   document.getElementById('period-info').innerHTML=
     'Zobrazujú sa dáta za: <strong>posledných '+days+' dní</strong>';
 }
 
-// Period switch
 document.querySelectorAll('.period-btn').forEach(btn=>{
   btn.addEventListener('click',function(e){
     e.preventDefault();
     document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
     this.classList.add('active');
     const d=parseInt(this.dataset.days);
-    updateKPI(d); renderChart(d);
+    updateKPI(d);renderChart(d);renderHeatmap(d);
   });
 });
 
-// URL sort
 function sortUrl(key){
   if(urlSortKey===key) urlSortDir=urlSortDir==='desc'?'asc':'desc';
-  else { urlSortKey=key; urlSortDir=key==='first_seen'?'asc':'desc'; }
+  else{urlSortKey=key;urlSortDir=key==='first_seen'?'asc':'desc';}
   ['renders','clicks','ctr','first_seen'].forEach(k=>{
     const th=document.getElementById('th-'+k);
     th.classList.remove('active','asc','desc');
@@ -251,105 +347,78 @@ function renderUrlTable(){
     if(typeof av==='string') return urlSortDir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
     return urlSortDir==='asc'?av-bv:bv-av;
   });
-  document.getElementById('url-tbody').innerHTML=sorted.map(row=>`
+  document.getElementById('url-tbody').innerHTML=sorted.map(r=>`
     <tr>
-      <td style="max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-        <a href="https://${row.url}" target="_blank" rel="noopener" style="color:var(--green);">${row.url}</a>
+      <td style="max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+        <a href="https://${r.url}" target="_blank" rel="noopener" style="color:var(--green)">${r.url}</a>
       </td>
-      <td class="text-right">${fmt(row.renders)}</td>
-      <td class="text-right">${fmt(row.clicks)}</td>
-      <td class="text-right"><span style="${ctrColor(row.ctr)}">${row.ctr}%</span></td>
-      <td class="text-right" style="font-size:0.82rem;color:var(--muted);">${row.first_seen}</td>
-    </tr>
-  `).join('');
+      <td class="text-right">${fmt(r.renders)}</td>
+      <td class="text-right">${fmt(r.clicks)}</td>
+      <td class="text-right"><span style="${ctrColor(r.ctr)}">${r.ctr}%</span></td>
+      <td class="text-right" style="font-size:.82rem;color:var(--muted)">${r.first_seen}</td>
+    </tr>`).join('');
 }
 
-// #9: fake download pre preview
-function fakeDownload(type){
+function toggleMenu(){document.getElementById('csv-menu').classList.toggle('open');}
+function fakeDownload(t){
   document.getElementById('csv-menu').classList.remove('open');
-  const labels={full:'kompletný',daily:'denné dáta',urls:'URL breakdown'};
-  alert('ℹ️ V produkcii by sa stiahol CSV súbor: '+labels[type]+'\n\nObsahuje: summary + delta + '+labels[type]);
+  const l={full:'kompletný export',daily:'denné dáta',urls:'URL breakdown'};
+  alert('ℹ️ V produkcii by sa stiahol CSV: '+l[t]);
 }
+document.addEventListener('click',()=>document.getElementById('csv-menu').classList.remove('open'));
 
-// Zatvori dropdown pri kliknutí von
-document.addEventListener('click',()=>{
-  document.getElementById('csv-menu').classList.remove('open');
-});
-
-// #2: Bar + Line layer graf
 function renderChart(days){
-  const pts = days<=30 ? days : Math.min(days,60);
-  const base = new Date('2025-03-11');
-  const raw = [];
+  const pts=days<=30?days:Math.min(days,60);
+  const base=new Date('2025-03-11');
+  const raw=[];
   for(let i=0;i<pts;i++){
-    const dt=new Date(base); dt.setDate(base.getDate()+i);
-    const datum=dt.toISOString().split('T')[0];
+    const dt=new Date(base);dt.setDate(base.getDate()+i);
     const s=Math.sin(i*7.3+1.1);
     const renders=Math.round(180+60*s+i*(days<=30?3.5:1.2));
     const clicks=Math.round(renders*(0.05+0.025*Math.sin(i*4.1)));
-    const ctr=renders>0?Math.round(clicks/renders*1000)/10:0;
-    raw.push({datum,renders,clicks,ctr});
+    raw.push({datum:dt.toISOString().split('T')[0],renders,clicks,
+      ctr:renders>0?Math.round(clicks/renders*1000)/10:0});
   }
-
-  const spec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    width: "container", height: 240,
-    data: { values: raw },
-    resolve: { scale: { y: "independent" } },
-    layer: [
-      // Vrstva 1: renders (zelene bary)
-      {
-        mark: { type:"bar", opacity:0.85, color:"#00a28a",
-                cornerRadiusTopLeft:2, cornerRadiusTopRight:2 },
-        encoding: {
-          x: { field:"datum", type:"temporal", timeUnit:"yearmonthdate",
-               title:null, axis:{labelAngle:-30,labelFontSize:11,
-               format: pts>60?'%b %Y':'%d.%m'} },
-          y: { field:"renders", type:"quantitative",
-               title:"Zobrazenia / Kliky",
-               axis:{titleColor:"#6c757d",labelColor:"#6c757d"} },
-          tooltip:[
-            {field:"datum",   type:"temporal",     title:"Dátum", timeUnit:"yearmonthdate"},
-            {field:"renders", type:"quantitative", title:"Zobrazenia"},
-            {field:"clicks",  type:"quantitative", title:"Kliky"},
-            {field:"ctr",     type:"quantitative", title:"CTR (%)", format:".1f"}
-          ]
-        }
-      },
-      // Vrstva 2: clicks (modre bary, priesvitne)
-      {
-        mark: { type:"bar", opacity:0.65, color:"#4a90d9",
-                cornerRadiusTopLeft:2, cornerRadiusTopRight:2 },
-        encoding: {
-          x: { field:"datum", type:"temporal", timeUnit:"yearmonthdate" },
-          y: { field:"clicks", type:"quantitative" }
-        }
-      },
-      // Vrstva 3: CTR line (oranzova, prava os)
-      {
-        mark: { type:"line", color:"#f59e0b", strokeWidth:2.5,
-                interpolate:"monotone",
-                point:{filled:true,size:40,color:"#f59e0b"} },
-        encoding: {
-          x: { field:"datum", type:"temporal", timeUnit:"yearmonthdate" },
-          y: { field:"ctr", type:"quantitative",
-               title:"CTR (%)",
-               axis:{titleColor:"#f59e0b",labelColor:"#f59e0b",
-                     orient:"right",format:".1f"} },
-          tooltip:[
-            {field:"datum", type:"temporal", title:"Dátum", timeUnit:"yearmonthdate"},
-            {field:"ctr",   type:"quantitative", title:"CTR (%)", format:".2f"}
-          ]
-        }
-      }
+  vegaEmbed('#widget-chart',{
+    "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+    width:"container",height:230,
+    data:{values:raw},
+    resolve:{scale:{y:"independent"}},
+    layer:[
+      {mark:{type:"bar",opacity:.85,color:"#00a28a",cornerRadiusTopLeft:2,cornerRadiusTopRight:2},
+       encoding:{
+         x:{field:"datum",type:"temporal",timeUnit:"yearmonthdate",title:null,
+            axis:{labelAngle:-30,labelFontSize:11}},
+         y:{field:"renders",type:"quantitative",title:"Zobrazenia / Kliky",
+            axis:{titleColor:"#6c757d",labelColor:"#6c757d"}},
+         tooltip:[
+           {field:"datum",type:"temporal",title:"Dátum",timeUnit:"yearmonthdate"},
+           {field:"renders",type:"quantitative",title:"Zobrazenia"},
+           {field:"clicks",type:"quantitative",title:"Kliky"},
+           {field:"ctr",type:"quantitative",title:"CTR (%)",format:".1f"}
+         ]}},
+      {mark:{type:"bar",opacity:.65,color:"#4a90d9",cornerRadiusTopLeft:2,cornerRadiusTopRight:2},
+       encoding:{
+         x:{field:"datum",type:"temporal",timeUnit:"yearmonthdate"},
+         y:{field:"clicks",type:"quantitative"}}},
+      {mark:{type:"line",color:"#f59e0b",strokeWidth:2.5,interpolate:"monotone",
+             point:{filled:true,size:40,color:"#f59e0b"}},
+       encoding:{
+         x:{field:"datum",type:"temporal",timeUnit:"yearmonthdate"},
+         y:{field:"ctr",type:"quantitative",title:"CTR (%)",
+            axis:{titleColor:"#f59e0b",labelColor:"#f59e0b",orient:"right",format:".1f"}},
+         tooltip:[
+           {field:"datum",type:"temporal",title:"Dátum",timeUnit:"yearmonthdate"},
+           {field:"ctr",type:"quantitative",title:"CTR (%)",format:".2f"}
+         ]}}
     ]
-  };
-  vegaEmbed('#widget-chart', spec, {actions:false, mode:'vega-lite'});
+  },{actions:false,mode:"vega-lite"});
 }
 
 // Init
 renderUrlTable();
 renderChart(30);
+renderHeatmap(30);
 </script>
 </body>
 </html>
