@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predplatné — Product Widgets v2</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Usage bar */
+    .usage-wrap { margin: 1rem 0 0; }
+    .usage-bar { height: 8px; border-radius: 4px; background: #e9ecef; margin: .4rem 0 .25rem; }
+    .usage-fill { height: 8px; border-radius: 4px; background: var(--green); transition: width .3s; }
+    .usage-fill.warning { background: #f59e0b; }
+    .usage-fill.danger  { background: var(--danger); }
+
+    /* Current plan card */
+    .current-plan-card {
+      border: 2px solid var(--green);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .current-plan-header {
+      background: var(--green);
+      color: white;
+      padding: .85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .current-plan-header h2 { margin:0; font-size:1.05rem; color:white; }
+    .current-plan-body { padding: 1.25rem 1.5rem; background: white; }
+    .plan-meta { display:flex; gap:2rem; flex-wrap:wrap; margin-bottom:.75rem; font-size:.85rem; }
+    .plan-meta span { color: var(--muted); }
+    .plan-meta strong { color: var(--dark); }
+
+    /* Offer cards */
+    .offer-cards-row { display:flex; gap:1rem; flex-wrap:wrap; }
+    .offer-card {
+      flex:1; min-width:220px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:1rem 1.25rem;
+      background:white;
+    }
+    .offer-card h6 { font-size:.85rem; font-weight:700; margin:0 0 .5rem; display:flex; align-items:center; gap:.35rem; }
+    .offer-card p { font-size:.82rem; color:var(--muted); margin:0 0 .75rem; }
+
+    /* Check / cross icons inline */
+    .feat-yes { color: var(--success); font-weight:700; }
+    .feat-no  { color: var(--muted); }
+
+    /* Invoices section */
+    .invoice-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.65rem 0;
+      border-bottom:1px solid var(--border);
+      font-size:.85rem;
+    }
+    .invoice-row:last-child { border-bottom:none; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">&#9632; Product Widgets</div>
+    <div class="sidebar-nav">
+      <a href="dashboard.html"><span class="icon">📊</span> Štatistiky</a>
+      <a href="widgets.html"><span class="icon">🧱</span> Widgety</a>
+      <a href="#"><span class="icon">🗄</span> Dáta</a>
+      <a href="predplatne.html" class="active"><span class="icon">💳</span> Predplatné</a>
+      <a href="#"><span class="icon">&#9881;</span> Nastavenia</a>
+    </div>
+    <div class="sidebar-footer">
+      <div style="font-weight:600;color:white;margin-bottom:.25rem;">Moda Bella s.r.o.</div>
+      <div>modabella.sk</div>
+      <div style="margin-top:.5rem;">Plán: <span style="color:#00a28a;font-weight:600;">Starter</span></div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="page-title">💳 Predplatné</div>
+
+    <!-- SOFT LIMIT BANNER (87%) -->
+    <div class="alert alert-warning" style="margin-bottom:1.5rem;">
+      <div>
+        ⚠️ <strong>Blížite sa k limitu zobrazení.</strong>
+        Tento mesiac: <strong>17 340</strong> z <strong>20 000</strong> (87%) — zvažte prechod na Pro.
+      </div>
+      <a href="#pricing" class="btn btn-warning btn-sm">Prejsť na Pro &rarr;</a>
+    </div>
+
+    <!-- AKTUALNY PLAN -->
+    <div class="current-plan-card">
+      <div class="current-plan-header">
+        <h2>✔ Aktuálny plán: <strong>Starter</strong></h2>
+        <span style="font-size:.85rem;opacity:.9;">Aktívny od 1. 10. 2024</span>
+      </div>
+      <div class="current-plan-body">
+        <div class="plan-meta">
+          <span>Ďalšia obnova: <strong>1. 5. 2026</strong></span>
+          <span>Cena: <strong>9 € / mesiac</strong></span>
+          <span>Billing: <strong>Shoptet</strong></span>
+        </div>
+
+        <div class="usage-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;">
+            <span>Zobrazenia tento mesiac</span>
+            <span style="font-weight:600;color:#f59e0b;">17 340 / 20 000 (87%)</span>
+          </div>
+          <div class="usage-bar">
+            <div class="usage-fill warning" style="width:87%;"></div>
+          </div>
+          <div style="font-size:.75rem;color:var(--muted);">Limit sa obnoví 1. 5. 2026. Systém vás nezablokuje, ale odporúčame upgrade.</div>
+        </div>
+
+        <div class="usage-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;">
+            <span>Aktívne widgety</span>
+            <span style="font-weight:600;">8 / 10</span>
+          </div>
+          <div class="usage-bar">
+            <div class="usage-fill" style="width:80%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POROVNANIE PLANON -->
+    <div class="card" id="pricing">
+      <div class="card-header">
+        <h2>📋 Plány a funkcie</h2>
+      </div>
+      <div class="card-body">
+        <div class="pricing-row">
+
+          <!-- STARTER (active) -->
+          <div class="pricing-plan active">
+            <h2 class="heading">Starter</h2>
+            <div class="body">
+              <div style="text-align:center;margin-bottom:1.25rem;">
+                <p class="price">9 €<small> / mes</small></p>
+                <p style="color:var(--muted);font-size:.82rem;margin:0;">Pre rozbiehajúce sa e-shopy</p>
+              </div>
+              <p>✅ Max. <strong>10 widgetov</strong></p>
+              <p>✅ Max. <strong>20 000 zobrazení</strong> / mes</p>
+              <p>✅ Sync <strong>1× denne</strong></p>
+              <p>✅ Štatistiky + export CSV</p>
+              <p>✅ Email digest</p>
+              <p class="feat-no">✗ Custom CSS</p>
+              <p class="feat-no">✗ Bez nášho odkazu</p>
+            </div>
+            <div class="footer">
+              <button disabled style="color:var(--success);font-weight:700;">✔ Váš aktuálny plán</button>
+            </div>
+          </div>
+
+          <!-- PRO -->
+          <div class="pricing-plan">
+            <h2 class="heading">Pro</h2>
+            <div class="body">
+              <div style="text-align:center;margin-bottom:1.25rem;">
+                <p class="price">19 €<small> / mes</small></p>
+                <p style="color:var(--muted);font-size:.82rem;margin:0;">Pre rastúce e-shopy</p>
+              </div>
+              <p>✅ Max. <strong>50 widgetov</strong></p>
+              <p>✅ Max. <strong>150 000 zobrazení</strong> / mes</p>
+              <p>✅ Sync <strong>1× denne</strong></p>
+              <p>✅ Štatistiky + export CSV</p>
+              <p>✅ Email digest</p>
+              <p>✅ <strong>Custom CSS</strong></p>
+              <p>✅ <strong>Bez nášho odkazu</strong></p>
+            </div>
+            <div class="footer">
+              <a href="#">Prejsť na Pro &rarr;</a>
+            </div>
+          </div>
+
+          <!-- BUSINESS -->
+          <div class="pricing-plan">
+            <h2 class="heading">Business</h2>
+            <div class="body">
+              <div style="text-align:center;margin-bottom:1.25rem;">
+                <p class="price">39 €<small> / mes</small></p>
+                <p style="color:var(--muted);font-size:.82rem;margin:0;">Pre ambiciózne e-shopy</p>
+              </div>
+              <p>✅ <strong>Neobmedzené</strong> widgety</p>
+              <p>✅ <strong>Neobmedzené</strong> zobrazenia</p>
+              <p>✅ Sync <strong>1× za hodinu</strong></p>
+              <p>✅ Štatistiky + export CSV</p>
+              <p>✅ Email digest</p>
+              <p>✅ <strong>Custom CSS</strong></p>
+              <p>✅ <strong>Bez nášho odkazu</strong></p>
+            </div>
+            <div class="footer">
+              <a href="#">Prejsť na Business &rarr;</a>
+            </div>
+          </div>
+
+        </div>
+        <p style="margin-top:1.25rem;text-align:center;font-size:.85rem;color:var(--muted);">Potrebujete väčšie limity alebo riešenie na mieru? Kontaktujte nás na <a href="mailto:info@productwidgets.cz">info@productwidgets.cz</a></p>
+      </div>
+    </div>
+
+    <!-- FAKTURY -->
+    <div class="card">
+      <div class="card-header"><h2>🧾 Faktúry</h2></div>
+      <div class="card-body">
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">Fakturácia prebieha cez Shoptet. Faktúry nájdete priamo vo svojom Shoptet účte.</p>
+        <div class="invoice-row">
+          <span>Apríl 2026</span>
+          <span style="color:var(--muted);">Starter · 9 €</span>
+          <span class="badge badge-success">Zaplatené</span>
+          <a href="#" class="btn btn-sm btn-outline">Stiahnuť PDF</a>
+        </div>
+        <div class="invoice-row">
+          <span>Marec 2026</span>
+          <span style="color:var(--muted);">Starter · 9 €</span>
+          <span class="badge badge-success">Zaplatené</span>
+          <a href="#" class="btn btn-sm btn-outline">Stiahnuť PDF</a>
+        </div>
+        <div class="invoice-row">
+          <span>Február 2026</span>
+          <span style="color:var(--muted);">Starter · 9 €</span>
+          <span class="badge badge-success">Zaplatené</span>
+          <a href="#" class="btn btn-sm btn-outline">Stiahnuť PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FREE BENEFITS -->
+    <div class="card">
+      <div class="card-header"><h2>🎁 Získajte výhody zadarmo</h2></div>
+      <div class="card-body">
+        <div class="offer-cards-row">
+
+          <!-- Rating reward -->
+          <div class="offer-card">
+            <h6>🔥 Odmena za hodnotenie</h6>
+            <p>Ohodnoťte nás na Shoptet Marketplace a získajte <strong>1 mesiac Pro zdarma</strong>.</p>
+            <a href="https://doplnky.shoptet.cz/product-widgets#section-ratings" target="_blank" class="btn btn-success btn-sm">Ohodnotiť na Shoptet &rarr;</a>
+          </div>
+
+          <!-- Agency reward -->
+          <div class="offer-card">
+            <h6>🤝 Agency partner</h6>
+            <p>Ste agentúra alebo spravujete viac e-shopov? Kontaktujte nás a dohodneme špeciálne podmienky.</p>
+            <a href="mailto:info@productwidgets.cz" class="btn btn-outline btn-sm">Kontaktovať nás</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem;">
+      <a href="dashboard.html" style="color:var(--muted);font-size:.85rem;">&larr; Späť na dashboard</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>
